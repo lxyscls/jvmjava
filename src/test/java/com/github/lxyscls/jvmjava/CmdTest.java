@@ -5,6 +5,7 @@
  */
 package com.github.lxyscls.jvmjava;
 
+import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,7 +18,7 @@ public class CmdTest {
     }
 
     @Test
-    public void testSomeMethod() {
+    public void testSomeMethod() throws ParseException {
         String args1[] = {"-help", "-version"};
         Cmd cmd1 = Cmd.parseCmd(args1);
         assertTrue(cmd1.helpFlag);
@@ -25,11 +26,11 @@ public class CmdTest {
         
         String args2[] = {"-cp", "C:\\Program Files\\Java\\jdk1.8.0_91"};
         Cmd cmd2 = Cmd.parseCmd(args2);
-        assertNotNull(cmd2.cpOption);
+        assertEquals(cmd2.cpOption, args2[1]);
         
         String args3[] = {"-classpath", "C:\\Program Files\\Java\\jdk1.8.0_91"};
         Cmd cmd3 = Cmd.parseCmd(args3);
-        assertNotNull(cmd3.cpOption);
+        assertEquals(cmd3.cpOption, args3[1]);
         
         String args4[] = {"myClass", "arg1", "arg2"};
         Cmd cmd4 = Cmd.parseCmd(args4);
@@ -43,7 +44,16 @@ public class CmdTest {
         Cmd cmd5 = Cmd.parseCmd(args5);
         assertEquals("myClass", cmd5.runClass);
         String classArgs2[] = {"arg1", "arg2", "arg3"};
-        assertArrayEquals(classArgs2, cmd5.runClassArgs);        
+        assertArrayEquals(classArgs2, cmd5.runClassArgs);
+
+        String args6[] = {"-Xjre", "C:\\Program Files\\Java\\jdk1.8.0_91\\jre"};
+        Cmd cmd6 = Cmd.parseCmd(args6);
+        assertEquals(cmd6.XjreOption, args6[1]);
     }
     
+    @Test (expected = ParseException.class)
+    public void testForExcetion() throws ParseException {
+        String args7[] = {"-unrecognized"};
+        Cmd.parseCmd(args7);
+    }
 }

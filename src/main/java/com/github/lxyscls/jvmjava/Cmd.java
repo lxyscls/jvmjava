@@ -18,6 +18,7 @@ class Cmd {
     String cpOption;
     String runClass;
     String[] runClassArgs;
+    String XjreOption;
     
     private Cmd() {}
     
@@ -25,7 +26,7 @@ class Cmd {
         System.out.println("Usage: Main [-options] class [args...]");
     }
     
-    static Cmd parseCmd(String[] args) {
+    static Cmd parseCmd(String[] args) throws ParseException {
         Cmd cmd = new Cmd();
         
         Options options = new Options();        
@@ -34,26 +35,28 @@ class Cmd {
         options.addOption("version", false, "print version and exit");
         options.addOption("classpath", true, "classpath");
         options.addOption("cp", true, "classpath");
+        options.addOption("Xjre", true, "path to jre");
         
         CommandLineParser parser = new DefaultParser();
-        try {
-            CommandLine cl = parser.parse(options, args);
-            cmd.helpFlag = cl.hasOption("help") || cl.hasOption("?");
-            cmd.versionFlag = cl.hasOption("version");
-            if (cl.hasOption("classpath")) {
-                cmd.cpOption = cl.getOptionValue("classpath");
-            } else if (cl.hasOption("cp")) {
-                cmd.cpOption = cl.getOptionValue("cp");
-            }
+
+        CommandLine cl = parser.parse(options, args);
+        cmd.helpFlag = cl.hasOption("help") || cl.hasOption("?");
+        cmd.versionFlag = cl.hasOption("version");
+        if (cl.hasOption("classpath")) {
+            cmd.cpOption = cl.getOptionValue("classpath");
+        } else if (cl.hasOption("cp")) {
+            cmd.cpOption = cl.getOptionValue("cp");
+        }
+        if (cl.hasOption("Xjre")) {
+            cmd.XjreOption = cl.getOptionValue("Xjre");
+        }
             
-            String[] leftOverArgs = cl.getArgs();
-            if (leftOverArgs.length > 0) {
-                cmd.runClass = leftOverArgs[0];
-                cmd.runClassArgs = Arrays.copyOfRange(leftOverArgs, 1, leftOverArgs.length);
-            }
-        } catch (ParseException e) {
-            printUsage();
-        }        
+        String[] leftOverArgs = cl.getArgs();
+        if (leftOverArgs.length > 0) {
+            cmd.runClass = leftOverArgs[0];
+            cmd.runClassArgs = Arrays.copyOfRange(leftOverArgs, 1, leftOverArgs.length);
+        }
+   
         return cmd;
     }
 }

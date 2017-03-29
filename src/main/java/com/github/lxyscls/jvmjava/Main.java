@@ -5,19 +5,27 @@
  */
 package com.github.lxyscls.jvmjava;
 
+import org.apache.commons.cli.ParseException;
+
 /**
  *
  * @author sk-xinyilong
  */
 public class Main {
     public static void main(String[] args) {
-        Cmd cmd = Cmd.parseCmd(args);
-        if (cmd.versionFlag) {
-            System.out.println("version 0.0.1");
-        } else if (cmd.helpFlag || cmd.runClass == null) {
+        Cmd cmd;
+        try {
+            cmd = Cmd.parseCmd(args);
+            if (cmd.versionFlag) {
+                System.out.println("version 0.0.1");
+            } else if (cmd.helpFlag || cmd.runClass == null) {
+                Cmd.printUsage();
+            } else {
+                startJVM(cmd);
+            }
+        } catch (ParseException ex) {
             Cmd.printUsage();
-        } else {
-            startJVM(cmd);
+            System.exit(-1);
         }
     }
     

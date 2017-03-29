@@ -23,17 +23,12 @@ class DirEntry implements Entry {
     }
     
     @Override
-    public byte[] readClass(String className) {
-        byte[] ret = null;
+    public byte[] readClass(String className) throws FileNotFoundException, IOException {
+        byte[] ret;
         String fileName = absDir + className;
-        try {
-            ret = new byte[(int)new File(fileName).length()];
-            new FileInputStream(fileName).read(ret);
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
+
+        ret = new byte[(int)new File(fileName).length()];
+        new FileInputStream(fileName).read(ret);
         return ret;
     }
     

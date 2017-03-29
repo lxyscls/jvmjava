@@ -5,15 +5,17 @@
  */
 package com.github.lxyscls.jvmjava.classpath;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  *
  * @author sk-xinyilong
  */
 public interface Entry {
-    final String PATHSEPARATOR = System.getProperty("path.separator");
-    
     public static Entry newEntry(String path) {
-        if (path.contains(PATHSEPARATOR)) {
+        if (path.contains(File.pathSeparator)) {
             return new CompositeEntry(path);
         }        
         if (path.endsWith("*")) {
@@ -26,7 +28,7 @@ public interface Entry {
         return new DirEntry(path);
     }
     
-    byte[] readClass(String className);
+    byte[] readClass(String className) throws FileNotFoundException, IOException;
     @Override
     String toString();
 }

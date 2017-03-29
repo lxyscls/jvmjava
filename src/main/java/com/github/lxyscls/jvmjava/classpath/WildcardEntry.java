@@ -6,8 +6,11 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.ZipException;
 
 /**
  *
@@ -28,7 +31,7 @@ class WildcardEntry implements Entry {
     }
     
     @Override
-    public byte[] readClass(String className) {
+    public byte[] readClass(String className) throws FileNotFoundException, ZipException, IOException{
         byte[] ret;
         for (Entry entry : entryList) {
             ret = entry.readClass(className);
@@ -45,6 +48,6 @@ class WildcardEntry implements Entry {
         entryList.forEach((entry) -> {
             strings.add(entry.toString());
         });
-        return String.join(PATHSEPARATOR, strings);
+        return String.join(File.pathSeparator, strings);
     }    
 }

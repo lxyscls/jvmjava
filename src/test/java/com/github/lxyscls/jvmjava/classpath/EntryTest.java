@@ -5,8 +5,6 @@
  */
 package com.github.lxyscls.jvmjava.classpath;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -21,19 +19,19 @@ public class EntryTest {
 
     @Test
     public void testWildcardEntry() {
-        Entry result = Entry.newEntry("C:\\Program Files\\Java\\jdk1.8.0_91\\jre\\lib\\*");
-        try {
-            assertNotNull(result.readClass("java/lang/Object.class"));
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
+        Entry result = Entry.newEntry("C:\\Program Files\\Java\\jdk1.8.0_73\\jre\\lib\\*");
+        assertNotNull(result.readClass("java/lang/Object.class"));
     }
     
-    @Test (expected = FileNotFoundException.class)
-    public void testDirEntry() throws FileNotFoundException, IOException {
+    @Test
+    public void testDirEntry() {
         Entry result = Entry.newEntry(".");
-        assertNull(result.readClass("java/lang/Object.class"));
+        assertNotNull(result.readClass("Object.class"));
+    }
+    
+    @Test
+    public void testCompositeEntry() {
+        Entry result = Entry.newEntry(".;*;E:\\Code\\jvmjava-master\\build\\classes\\main\\com\\github\\lxyscls\\jvmjava");
+        assertNotNull(result.readClass("Cmd.class"));
     }
 }

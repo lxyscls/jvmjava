@@ -6,11 +6,8 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.zip.ZipException;
 
 /**
  *
@@ -27,7 +24,7 @@ class CompositeEntry implements Entry {
     }
     
     @Override
-    public byte[] readClass(String className) throws FileNotFoundException, ZipException, IOException {
+    public byte[] readClass(String className) {
         byte[] ret;
         for (Entry entry : entryList) {
             ret = entry.readClass(className);

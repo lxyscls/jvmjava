@@ -7,9 +7,7 @@ package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
-import java.util.zip.ZipException;
 
 /**
  *
@@ -32,7 +30,7 @@ public class Classpath {
         userClasspath = Entry.newEntry(cpOption);
     }
     
-    public byte[] readClass(String className) throws FileNotFoundException, ZipException, IOException {
+    public byte[] readClass(String className) {
         byte[] ret;
         
         ret = bootClasspath.readClass(className + ".class");

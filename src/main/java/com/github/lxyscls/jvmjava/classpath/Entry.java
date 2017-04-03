@@ -6,8 +6,6 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  *
@@ -28,7 +26,7 @@ public interface Entry {
         return new DirEntry(path);
     }
     
-    byte[] readClass(String className) throws FileNotFoundException, IOException;
+    byte[] readClass(String className);
     @Override
     String toString();
 }

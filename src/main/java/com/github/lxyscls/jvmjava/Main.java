@@ -5,10 +5,12 @@
  */
 package com.github.lxyscls.jvmjava;
 
+import com.github.lxyscls.jvmjava.classfile.ClassFile;
+import com.github.lxyscls.jvmjava.classfile.ClassReader;
+import com.github.lxyscls.jvmjava.classfile.MemberInfo;
 import com.github.lxyscls.jvmjava.classpath.Classpath;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.zip.ZipException;
 import org.apache.commons.cli.ParseException;
 
@@ -31,24 +33,41 @@ public class Main {
         } catch (ParseException ex) {
             Cmd.printUsage();
         } catch (FileNotFoundException | ZipException ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
         } catch (IOException ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
         }
     }
     
     static void startJVM(Cmd cmd) throws FileNotFoundException, ZipException, IOException {
         Classpath cp = new Classpath(cmd.XjreOption, cmd.cpOption);
-            
-        System.out.printf("classpath:%s class:%s ", cp, cmd.runClass);
-        System.out.printf("args:");
-        for (String arg : cmd.runClassArgs) {
-            System.out.printf(" %s ", arg);
+        byte[] classData = cp.readClass(cmd.runClass.replace(".", "/"));
+        if (classData != null) {
+            ClassFile cf = new ClassFile(new ClassReader(classData));
+            printClassInfo(cf);
+        } else {
+            System.out.println("Can't read Class File");
+        }
+    }
+    
+    static void printClassInfo(ClassFile cf) {
+        System.out.printf("version: %d.%d\n", cf.getMajorVersion(), cf.getMinorVersion());
+        System.out.printf("constants count: %d\n", cf.getConstantPool().getPoolSize());
+        System.out.printf("access flags: 0x%x\n", cf.getAccessFlags());
+        System.out.printf("this class: %s\n", cf.getClassName());
+        System.out.printf("super class: %s\n", cf.getSuperClassName());
+        System.out.printf("interfaces: ");
+        for (String intfName : cf.getInterfaceNames()) {
+            System.out.printf(" %s ", intfName);
         }
         System.out.printf("\n");
-            
-        byte[] ret = cp.readClass(cmd.runClass.replace(".", "/"));
-        System.out.print("class data:");
-        System.out.println(Arrays.toString(ret));
+        System.out.printf("fields count: %d\n", cf.getFields().length);
+        for (MemberInfo mInfo : cf.getFields()) {
+            System.out.printf(" %s %s\n", mInfo.getName(), mInfo.getDescriptor());
+        }
+        System.out.printf("methods count: %d\n", cf.getMethods().length);
+        for (MemberInfo mInfo : cf.getMethods()) {
+            System.out.printf(" %s %s\n", mInfo.getName(), mInfo.getDescriptor());
+        }
     }
 }

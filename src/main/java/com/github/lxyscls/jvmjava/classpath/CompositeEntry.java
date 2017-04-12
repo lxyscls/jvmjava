@@ -13,7 +13,7 @@ import java.util.LinkedList;
  *
  * @author sk-xinyilong
  */
-class CompositeEntry implements Entry {
+class CompositeEntry extends Entry {
     private final List<Entry> entryList;
     
     public CompositeEntry(String pathList) {

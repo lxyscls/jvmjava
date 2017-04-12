@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author sk-xinyilong
  */
-class DirEntry implements Entry {
+class DirEntry extends Entry {
     private final String absDir;
     
     DirEntry(String path) {

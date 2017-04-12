@@ -11,7 +11,7 @@ import java.io.File;
  *
  * @author sk-xinyilong
  */
-public interface Entry {
+public abstract class Entry {
     public static Entry newEntry(String path) {
         if (path.contains(File.pathSeparator)) {
             return new CompositeEntry(path);
@@ -26,7 +26,7 @@ public interface Entry {
         return new DirEntry(path);
     }
     
-    byte[] readClass(String className);
+    public abstract byte[] readClass(String className);
     @Override
-    String toString();
+    public abstract String toString();
 }

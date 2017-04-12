@@ -16,7 +16,7 @@ import java.util.zip.ZipFile;
  *
  * @author sk-xinyilong
  */
-class ZipEntry implements Entry {
+class ZipEntry extends Entry {
     private final String absPath;
     
     ZipEntry(String path) {

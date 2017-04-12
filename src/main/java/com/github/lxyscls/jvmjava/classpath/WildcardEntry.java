@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author sk-xinyilong
  */
-class WildcardEntry implements Entry {
+class WildcardEntry extends Entry {
     private final List<Entry> entryList = new LinkedList<>();
     
     WildcardEntry(String path) {

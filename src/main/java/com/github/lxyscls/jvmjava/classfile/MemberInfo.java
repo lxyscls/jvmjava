@@ -35,6 +35,10 @@ public class MemberInfo {
     public String getDescriptor() {
         return cp.getUtf8(descriptorIndex);
     }
+    
+    public int getAccessFlags() {
+        return accessFlags;
+    }
 }
 
 class MemberInfos {

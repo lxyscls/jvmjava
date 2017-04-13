@@ -6,6 +6,7 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -16,7 +17,7 @@ import java.util.LinkedList;
 class CompositeEntry extends Entry {
     private final List<Entry> entryList;
     
-    public CompositeEntry(String pathList) {
+    public CompositeEntry(String pathList) throws IOException {
         entryList = new LinkedList<>();
         for (String path : pathList.split(File.pathSeparator)) {
             entryList.add(Entry.newEntry(path));
@@ -24,7 +25,7 @@ class CompositeEntry extends Entry {
     }
     
     @Override
-    public byte[] readClass(String className) {
+    public byte[] readClass(String className) throws IOException {
         byte[] ret;
         for (Entry entry : entryList) {
             ret = entry.readClass(className);

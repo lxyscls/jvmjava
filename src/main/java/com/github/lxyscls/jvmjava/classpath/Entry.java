@@ -6,13 +6,14 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
  * @author sk-xinyilong
  */
 public abstract class Entry {
-    public static Entry newEntry(String path) {
+    public static Entry newEntry(String path) throws IOException {
         if (path.contains(File.pathSeparator)) {
             return new CompositeEntry(path);
         }        
@@ -26,7 +27,7 @@ public abstract class Entry {
         return new DirEntry(path);
     }
     
-    public abstract byte[] readClass(String className);
+    public abstract byte[] readClass(String className) throws IOException;
     @Override
     public abstract String toString();
 }

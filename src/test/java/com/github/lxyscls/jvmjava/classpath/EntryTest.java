@@ -5,6 +5,7 @@
  */
 package com.github.lxyscls.jvmjava.classpath;
 
+import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,20 +19,20 @@ public class EntryTest {
     }
 
     @Test
-    public void testWildcardEntry() {
-        Entry result = Entry.newEntry("C:\\Program Files\\Java\\jdk1.8.0_73\\jre\\lib\\*");
+    public void testWildcardEntry() throws IOException {
+        Entry result = Entry.newEntry("C:\\Program Files\\Java\\jdk1.8.0_91\\jre\\lib\\*");
         assertNotNull(result.readClass("java/lang/Object.class"));
     }
     
     @Test
-    public void testDirEntry() {
-        Entry result = Entry.newEntry(".");
-        assertNotNull(result.readClass("Object.class"));
+    public void testDirEntry() throws IOException {
+        Entry result = Entry.newEntry(".\\src\\test\\resources\\");
+        assertNotNull(result.readClass("ClassFileTest.class"));
     }
     
     @Test
-    public void testCompositeEntry() {
-        Entry result = Entry.newEntry(".;*;E:\\Code\\jvmjava-master\\build\\classes\\main\\com\\github\\lxyscls\\jvmjava");
-        assertNotNull(result.readClass("Cmd.class"));
+    public void testCompositeEntry() throws IOException {
+        Entry result = Entry.newEntry(".;*;.\\src\\test\\resources\\");
+        assertNotNull(result.readClass("ClassFileTest.class"));
     }
 }

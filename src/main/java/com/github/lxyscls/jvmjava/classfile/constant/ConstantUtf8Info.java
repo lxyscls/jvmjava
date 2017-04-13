@@ -6,8 +6,6 @@
 package com.github.lxyscls.jvmjava.classfile.constant;
 
 import com.github.lxyscls.jvmjava.classfile.ClassReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 
 /**

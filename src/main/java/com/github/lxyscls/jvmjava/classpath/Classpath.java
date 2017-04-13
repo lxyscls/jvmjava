@@ -7,6 +7,7 @@ package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -18,11 +19,11 @@ public class Classpath {
     private final Entry extClasspath;
     private final Entry userClasspath;
     
-    public Classpath(String jreOption, String cpOption) throws FileNotFoundException {
+    public Classpath(String jreOption, String cpOption) throws FileNotFoundException, IOException {
         String jreDir = getJreDir(jreOption);
         
         bootClasspath = new WildcardEntry(String.join(File.separator, jreDir, "lib", "*"));
-        extClasspath = new WildcardEntry(String.join(File.separator, jreDir, "lib", "*", "ext"));
+        extClasspath = new WildcardEntry(String.join(File.separator, jreDir, "lib", "ext", "*"));
         
         if (cpOption == null) {
             cpOption = ".";
@@ -30,7 +31,7 @@ public class Classpath {
         userClasspath = Entry.newEntry(cpOption);
     }
     
-    public byte[] readClass(String className) {
+    public byte[] readClass(String className) throws IOException {
         byte[] ret;
         
         ret = bootClasspath.readClass(className + ".class");

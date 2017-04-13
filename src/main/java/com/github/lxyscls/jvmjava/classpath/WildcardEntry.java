@@ -6,6 +6,7 @@
 package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,11 +17,10 @@ import java.util.List;
 class WildcardEntry extends Entry {
     private final List<Entry> entryList = new LinkedList<>();
     
-    WildcardEntry(String path) {
+    WildcardEntry(String path) throws IOException {
         String baseDirName = path.substring(0, path.length()-1);
         if (baseDirName.equals("")) {
-            baseDirName = new File(".").getAbsolutePath();
-            baseDirName = baseDirName.substring(0, baseDirName.length()-1);
+            baseDirName = new File(".").getCanonicalPath();
         }
         File baseDir = new File(baseDirName);
         if (baseDir.isDirectory()) {
@@ -32,7 +32,7 @@ class WildcardEntry extends Entry {
     }
     
     @Override
-    public byte[] readClass(String className) {
+    public byte[] readClass(String className) throws IOException {
         byte[] ret;
         for (Entry entry : entryList) {
             ret = entry.readClass(className);

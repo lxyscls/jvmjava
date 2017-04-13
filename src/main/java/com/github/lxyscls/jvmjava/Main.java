@@ -9,9 +9,7 @@ import com.github.lxyscls.jvmjava.classfile.ClassFile;
 import com.github.lxyscls.jvmjava.classfile.ClassReader;
 import com.github.lxyscls.jvmjava.classfile.MemberInfo;
 import com.github.lxyscls.jvmjava.classpath.Classpath;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.zip.ZipException;
 import org.apache.commons.cli.ParseException;
 
 /**
@@ -19,7 +17,7 @@ import org.apache.commons.cli.ParseException;
  * @author sk-xinyilong
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Cmd cmd;
         try {
             cmd = Cmd.parseCmd(args);
@@ -32,14 +30,10 @@ public class Main {
             }
         } catch (ParseException ex) {
             Cmd.printUsage();
-        } catch (FileNotFoundException | ZipException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
     
-    static void startJVM(Cmd cmd) throws FileNotFoundException, ZipException, IOException {
+    static void startJVM(Cmd cmd) throws IOException {
         Classpath cp = new Classpath(cmd.XjreOption, cmd.cpOption);
         byte[] classData = cp.readClass(cmd.runClass.replace(".", "/"));
         if (classData != null) {

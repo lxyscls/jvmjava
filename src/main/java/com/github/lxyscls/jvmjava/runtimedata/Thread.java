@@ -34,4 +34,12 @@ public class Thread {
     Frame currentFrame() {
         return stack.peekFirst();
     }
+    
+    int getPc() {
+       return pc; 
+    }
+    
+    void setPc(int pc) {
+        this.pc = pc;
+    }
 }

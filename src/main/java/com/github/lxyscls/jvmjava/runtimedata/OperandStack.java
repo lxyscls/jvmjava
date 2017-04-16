@@ -5,65 +5,57 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  *
  * @author sk-xinyilong
  */
 class OperandStack {
-    private final Object[] slots;
-    private int top = 0;
+    private final Deque<Object> stack;
 
     OperandStack(int maxStack) {
-        slots = new Object[maxStack];
+        stack = new ArrayDeque<>();
     }
     
     void pushInt(Integer val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     int popInt() {
-       int ret = (Integer)slots[--top]; 
-       slots[top] = null;
-       return ret;
+        return (Integer)stack.pollFirst();
     }
     
     void pushFloat(Float val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     float popFloat() {
-        float ret = (Float)slots[--top];
-        slots[top] = null;
-        return ret;
+        return (Float)stack.pollFirst();
     }
     
     void pushLong(Long val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     long popLong() {
-        long ret = (Long)slots[--top];
-        slots[top] = null;
-        return ret;
+        return (Long)stack.pollFirst();
     }
     
     void pushDouble(Double val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     double popDouble() {
-        double ret = (Double)slots[--top];
-        slots[top] = null;
-        return ret;
+        return (Double)stack.pollFirst();
     }
     
     void pushRef(Object ref) {
-        slots[top++] = ref;
+        stack.addFirst(ref);
     }
     
     Object popRef() {
-        Object ref = slots[--top];
-        slots[top] = null;
-        return ref;
+        return stack.pollFirst();
     }
 }

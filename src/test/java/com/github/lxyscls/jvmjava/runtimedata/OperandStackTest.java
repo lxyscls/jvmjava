@@ -27,10 +27,9 @@ public class OperandStackTest {
         ops.pushLong(-2997924580L);
         ops.pushFloat(3.1415926F);
         ops.pushDouble(2.71828182845);
-        Object o = new Object();
-        ops.pushRef(o);
+        ops.pushRef(null);
         
-        assertEquals(ops.popRef(), o);
+        assertEquals(ops.popRef(), null);
         assertEquals(ops.popDouble(), 2.71828182845, 0.000001);
         assertEquals(ops.popFloat(), 3.1415926F, 0.000001);
         assertEquals(ops.popLong(),  -2997924580L);

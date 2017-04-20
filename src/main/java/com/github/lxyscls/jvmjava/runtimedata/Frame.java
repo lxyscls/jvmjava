@@ -9,13 +9,21 @@ package com.github.lxyscls.jvmjava.runtimedata;
  *
  * @author sk-xinyilong
  */
-class Frame {
+public class Frame {
     Frame lower;
-    LocalVars localVars;
-    OperandStack operandStack;
+    private final LocalVars localVars;
+    private final OperandStack operandStack;
     
-    Frame(int maxLocals, int maxStack) {
+    public Frame(int maxLocals, int maxStack) {
         localVars = new LocalVars(maxLocals);
         operandStack = new OperandStack(maxStack);
+    }
+    
+    public OperandStack getOperandStack() {
+        return operandStack;
+    }
+    
+    public LocalVars getLocalVars() {
+        return localVars;
     }
 }

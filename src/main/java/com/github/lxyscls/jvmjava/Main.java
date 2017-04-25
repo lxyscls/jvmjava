@@ -39,6 +39,12 @@ public class Main {
         if (classData != null) {
             ClassFile cf = new ClassFile(new ClassReader(classData));
             printClassInfo(cf);
+            MemberInfo mainMethod = getMainMethod(cf);
+            if (mainMethod != null) {
+                Interpreter.interpret(mainMethod);
+            } else {
+                System.out.println("Can't find main method");
+            }
         } else {
             System.out.println("Can't read Class File");
         }
@@ -63,5 +69,14 @@ public class Main {
         for (MemberInfo mInfo : cf.getMethods()) {
             System.out.printf(" %s %s\n", mInfo.getName(), mInfo.getDescriptor());
         }
+    }
+    
+    static MemberInfo getMainMethod(ClassFile cf) {
+        for (MemberInfo mInfo : cf.getMethods()) {
+            if (mInfo.getName().equals("main") && mInfo.getDescriptor().equals("([Ljava/lang/String;)V")) {
+                return mInfo;
+            }
+        }
+        return null;
     }
 }

@@ -23,7 +23,7 @@ public class AttributeInfos {
         return attributes;
     }
     
-    private static AttributeInfo newAttributeInfo(ClassReader reader, ConstantPool cp,
+    public static AttributeInfo newAttributeInfo(ClassReader reader, ConstantPool cp,
             String attrName, long attrLen) {
         switch (attrName) {
             case "Code": return new CodeAttributeInfo(reader, cp);

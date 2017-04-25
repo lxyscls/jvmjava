@@ -5,57 +5,78 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /**
  *
  * @author sk-xinyilong
  */
-class OperandStack {
-    private final Deque<Object> stack;
+public class OperandStack {
+    private final Object[] slots;
+    private int top = 0;
 
-    OperandStack(int maxStack) {
-        stack = new ArrayDeque<>();
+    public OperandStack(int maxStack) {
+        slots = new Object[maxStack];
     }
     
-    void pushInt(Integer val) {
-        stack.addFirst(val);
+    public void pushInt(Integer val) {
+        slots[top++] = val;
     }
     
-    int popInt() {
-        return (Integer)stack.pollFirst();
+    public int popInt() {
+       int ret = (Integer)slots[--top]; 
+       slots[top] = null;
+       return ret;
     }
     
-    void pushFloat(Float val) {
-        stack.addFirst(val);
+    public void pushFloat(Float val) {
+        slots[top++] = val;
     }
     
-    float popFloat() {
-        return (Float)stack.pollFirst();
+    public float popFloat() {
+        float ret = (Float)slots[--top];
+        slots[top] = null;
+        return ret;
     }
     
-    void pushLong(Long val) {
-        stack.addFirst(val);
+    public void pushLong(Long val) {
+        slots[top++] = val;
     }
     
-    long popLong() {
-        return (Long)stack.pollFirst();
+    public long popLong() {
+        long ret = (Long)slots[--top];
+        slots[top] = null;
+        return ret;
     }
     
-    void pushDouble(Double val) {
-        stack.addFirst(val);
+    public void pushDouble(Double val) {
+        slots[top++] = val;
     }
     
-    double popDouble() {
-        return (Double)stack.pollFirst();
+    public double popDouble() {
+        double ret = (Double)slots[--top];
+        slots[top] = null;
+        return ret;
     }
     
-    void pushRef(Object ref) {
-        stack.addFirst(ref);
+    public void pushRef(Object ref) {
+        slots[top++] = ref;
     }
     
-    Object popRef() {
-        return stack.pollFirst();
+    public Object popRef() {
+        Object ref = slots[--top];
+        slots[top] = null;
+        return ref;
+    }
+    
+    public Object getTop() {
+        return slots[top-1];
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Object slot : slots) {
+            sb.append(" {").append(String.valueOf(slot)).append("} ");
+        }
+        return sb.toString();
     }
 }

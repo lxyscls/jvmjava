@@ -7,6 +7,7 @@ package com.github.lxyscls.jvmjava.classfile;
 
 import com.github.lxyscls.jvmjava.classfile.attribute.AttributeInfo;
 import com.github.lxyscls.jvmjava.classfile.attribute.AttributeInfos;
+import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
 import com.github.lxyscls.jvmjava.classfile.constant.ConstantPool;
 
 /**
@@ -38,6 +39,15 @@ public class MemberInfo {
     
     public int getAccessFlags() {
         return accessFlags;
+    }
+    
+    public AttributeInfo getCodeAttribute() {
+        for (AttributeInfo info : attributes) {
+            if (info instanceof CodeAttributeInfo) {
+                return info;
+            }
+        }
+        return null;
     }
 }
 

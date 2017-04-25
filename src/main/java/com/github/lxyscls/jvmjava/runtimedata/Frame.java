@@ -9,13 +9,37 @@ package com.github.lxyscls.jvmjava.runtimedata;
  *
  * @author sk-xinyilong
  */
-class Frame {
+public class Frame {
     Frame lower;
-    LocalVars localVars;
-    OperandStack operandStack;
+    private final LocalVars localVars;
+    private final OperandStack operandStack;
+    private final Jthread thread;
+    private int nextPc;
     
-    Frame(int maxLocals, int maxStack) {
+    public Frame(Jthread thread, int maxLocals, int maxStack) {
+        this.thread = thread;
+        this.nextPc = 0;
         localVars = new LocalVars(maxLocals);
         operandStack = new OperandStack(maxStack);
+    }
+    
+    public OperandStack getOperandStack() {
+        return operandStack;
+    }
+    
+    public LocalVars getLocalVars() {
+        return localVars;
+    }
+    
+    public void setNextPc(int nextPc) {
+        this.nextPc = nextPc;
+    }
+    
+    public int getNextPc() {
+        return this.nextPc;
+    }
+    
+    public Jthread getThread() {
+        return this.thread;
     }
 }

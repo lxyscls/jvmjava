@@ -48,5 +48,17 @@ public class CodeAttributeInfo extends AttributeInfo {
         }
         
         attributes = AttributeInfos.readAttributes(reader, cp);
-    } 
+    }
+    
+    public int getMaxStack() {
+        return maxStack;
+    }
+    
+    public int getMaxLocals() {
+        return maxLocals;
+    }
+    
+    public byte[] getCode() {
+        return code;
+    }
 }

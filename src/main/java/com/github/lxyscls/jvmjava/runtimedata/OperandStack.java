@@ -19,6 +19,7 @@ public class OperandStack {
     
     public void pushInt(Integer val) {
         slots[top++] = val;
+<<<<<<< HEAD
     }
     
     public int popInt() {
@@ -78,5 +79,57 @@ public class OperandStack {
             sb.append(" {").append(String.valueOf(slot)).append("} ");
         }
         return sb.toString();
+=======
+    }
+    
+    public int popInt() {
+       int ret = (Integer)slots[--top]; 
+       slots[top] = null;
+       return ret;
+    }
+    
+    public void pushFloat(Float val) {
+        slots[top++] = val;
+    }
+    
+    public float popFloat() {
+        float ret = (Float)slots[--top];
+        slots[top] = null;
+        return ret;
+    }
+    
+    public void pushLong(Long val) {
+        slots[top++] = val;
+    }
+    
+    public long popLong() {
+        long ret = (Long)slots[--top];
+        slots[top] = null;
+        return ret;
+    }
+    
+    public void pushDouble(Double val) {
+        slots[top++] = val;
+    }
+    
+    public double popDouble() {
+        double ret = (Double)slots[--top];
+        slots[top] = null;
+        return ret;
+    }
+    
+    public void pushRef(Object ref) {
+        slots[top++] = ref;
+    }
+    
+    public Object popRef() {
+        Object ref = slots[--top];
+        slots[top] = null;
+        return ref;
+    }
+    
+    public Object getTop() {
+        return slots[top-1];
+>>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
     }
 }

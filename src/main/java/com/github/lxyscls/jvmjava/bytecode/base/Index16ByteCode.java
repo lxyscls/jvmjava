@@ -16,9 +16,12 @@ public abstract class Index16ByteCode extends ByteCode {
     public void fetchOperands(ByteCodeReader reader) {
         index = reader.readUint16();
     }
+<<<<<<< HEAD
     
     @Override
     public String toString() {
         return "index: " + String.valueOf(index);
     }
+=======
+>>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
 }

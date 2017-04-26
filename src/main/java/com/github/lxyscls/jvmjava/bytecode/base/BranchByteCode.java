@@ -5,17 +5,13 @@
  */
 package com.github.lxyscls.jvmjava.bytecode.base;
 
-<<<<<<< HEAD
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 
-=======
->>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
 /**
  *
  * @author sk-xinyilong
  */
 public abstract class BranchByteCode extends ByteCode {
-<<<<<<< HEAD
     protected int offset;
     
     @Override
@@ -31,12 +27,5 @@ public abstract class BranchByteCode extends ByteCode {
     @Override
     public String toString() {
         return "offset: " + String.valueOf(offset);
-=======
-    private int offset;
-    
-    @Override
-    public void fetchOperands(ByteCodeReader reader) {
-        offset = reader.readUint16();
->>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
     }
 }

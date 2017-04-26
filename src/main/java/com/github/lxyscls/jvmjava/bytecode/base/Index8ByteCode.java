@@ -16,12 +16,9 @@ public abstract class Index8ByteCode extends ByteCode {
     public void fetchOperands(ByteCodeReader reader) {
         index = reader.readUint8();
     }
-<<<<<<< HEAD
 
     @Override
     public String toString() {
         return "index: " + String.valueOf(index);
     }    
-=======
->>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
 }

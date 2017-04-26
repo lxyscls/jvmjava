@@ -26,14 +26,11 @@ class Bipush extends ByteCode {
     public void fetchOperands(ByteCodeReader reader) {
         val = reader.readInt8();
     }
-<<<<<<< HEAD
     
     @Override
     public String toString() {
         return String.valueOf(val);
     }
-=======
->>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
 }
 
 class Sipush extends ByteCode {
@@ -48,12 +45,9 @@ class Sipush extends ByteCode {
     public void fetchOperands(ByteCodeReader reader) {
         val = reader.readInt16();
     }
-<<<<<<< HEAD
     
     @Override
     public String toString() {
         return String.valueOf(val);
     }
-=======
->>>>>>> ceab5eeee8fec15ee2a35d22c56bbca886fdcd89
 }

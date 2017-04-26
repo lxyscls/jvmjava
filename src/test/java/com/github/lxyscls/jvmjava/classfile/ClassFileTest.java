@@ -7,7 +7,6 @@ package com.github.lxyscls.jvmjava.classfile;
 
 import com.github.lxyscls.jvmjava.classfile.constant.ConstantPool;
 import com.github.lxyscls.jvmjava.classpath.Entry;
-import java.io.File;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +68,6 @@ public class ClassFileTest {
 
     @Test
     public void testGetClassName() {
-        ClassFile instance = null;
         String expResult = "jvmjava/ClassFileTest";
         String result = cf.getClassName();
         assertEquals(expResult, result);

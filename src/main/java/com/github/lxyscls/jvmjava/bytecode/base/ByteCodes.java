@@ -12,6 +12,7 @@ import com.github.lxyscls.jvmjava.bytecode.convert.Converts;
 import com.github.lxyscls.jvmjava.bytecode.extend.Extends;
 import com.github.lxyscls.jvmjava.bytecode.load.Loads;
 import com.github.lxyscls.jvmjava.bytecode.math.Maths;
+import com.github.lxyscls.jvmjava.bytecode.reference.References;
 import com.github.lxyscls.jvmjava.bytecode.stack.Stacks;
 import com.github.lxyscls.jvmjava.bytecode.store.Stores;
 
@@ -38,7 +39,7 @@ public class ByteCodes {
         } else if (opCode >= 0xa7 && opCode <= 0xb1) {
             return Controls.newControl(opCode);
         } else if (opCode >= 0xb2 && opCode <= 0xc3) {
-            throw new UnsupportedOperationException(String.valueOf(opCode)); // reference
+            return References.newReference(opCode);
         } else if (opCode >= 0xc4 && opCode <= 0xc9) {
             return Extends.newExtend(opCode);
         } else if (opCode >= 0xca && opCode <= 0xff) {

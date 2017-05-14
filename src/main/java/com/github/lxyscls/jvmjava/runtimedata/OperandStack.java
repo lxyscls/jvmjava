@@ -5,78 +5,79 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
+import java.util.LinkedList;
+import java.util.Deque;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
+
 /**
  *
  * @author sk-xinyilong
  */
 public class OperandStack {
-    private final Object[] slots;
-    private int top = 0;
+    private final Deque<Object> stack;
 
     public OperandStack(int maxStack) {
-        slots = new Object[maxStack];
+        stack = new LinkedList<>();
     }
     
     public void pushInt(Integer val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     public int popInt() {
-       int ret = (Integer)slots[--top]; 
-       slots[top] = null;
-       return ret;
+       return (Integer)stack.pollFirst();
     }
     
     public void pushFloat(Float val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     public float popFloat() {
-        float ret = (Float)slots[--top];
-        slots[top] = null;
-        return ret;
+       return (Float)stack.pollFirst();
     }
     
     public void pushLong(Long val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     public long popLong() {
-        long ret = (Long)slots[--top];
-        slots[top] = null;
-        return ret;
+       return (Long)stack.pollFirst();
     }
     
     public void pushDouble(Double val) {
-        slots[top++] = val;
+        stack.addFirst(val);
     }
     
     public double popDouble() {
-        double ret = (Double)slots[--top];
-        slots[top] = null;
-        return ret;
+       return (Double)stack.pollFirst();
     }
     
-    public void pushRef(Object ref) {
-        slots[top++] = ref;
+    public void pushRef(Jobject ref) {
+        stack.addFirst(ref);
     }
     
-    public Object popRef() {
-        Object ref = slots[--top];
-        slots[top] = null;
-        return ref;
+    public Jobject popRef() {
+       return (Jobject)stack.pollFirst();
+    }
+    
+    public void pushObject(Object obj) {
+        stack.addFirst(obj);
+    }
+    
+    public Object popObject() {
+        return stack.pollFirst();
     }
     
     public Object getTop() {
-        return slots[top-1];
+        return stack.peekFirst();
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Object slot : slots) {
+        stack.forEach((slot) -> {
             sb.append(" {").append(String.valueOf(slot)).append("} ");
-        }
+        });
         return sb.toString();
     }
 }

@@ -49,6 +49,9 @@ public class Constants {
             case 0x0f: return DCONST1;
             case 0x10: return new Bipush();
             case 0x11: return new Sipush();
+            case 0x12: return new Ldc();
+            case 0x13: return new Ldc_w();
+            case 0x14: return new Ldc2_w();
         }
         return null;
     }

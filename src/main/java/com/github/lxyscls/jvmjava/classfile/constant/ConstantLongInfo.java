@@ -17,4 +17,8 @@ public class ConstantLongInfo extends ConstantInfo {
     ConstantLongInfo(ClassReader reader) {
         val = reader.readUint64().longValue();        
     }
+    
+    public Long getValue() {
+        return val;
+    }
 }

@@ -17,4 +17,8 @@ public class ConstantFloatInfo extends ConstantInfo {
     ConstantFloatInfo(ClassReader reader) {
         val = Float.intBitsToFloat((int)reader.readUint32());        
     }
+    
+    public Float getValue() {
+        return val;
+    }
 }

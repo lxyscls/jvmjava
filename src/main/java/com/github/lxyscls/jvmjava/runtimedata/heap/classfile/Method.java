@@ -1,0 +1,39 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
+
+import com.github.lxyscls.jvmjava.classfile.MemberInfo;
+import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
+
+/**
+ *
+ * @author sk-xinyilong
+ */
+public class Method extends ClassMember {
+    private final int maxLocals;
+    private final int maxStack;
+    private final byte[] code;
+    
+    public Method(MemberInfo info) {
+        super(info);
+        CodeAttributeInfo codeInfo = info.getCodeAttribute();
+        maxLocals = codeInfo.getMaxLocals();
+        maxStack = codeInfo.getMaxStack();
+        code = codeInfo.getCode();
+    }
+    
+    public int getMaxLocals() {
+        return this.maxLocals;
+    }
+    
+    public int getMaxStack() {
+        return this.maxStack;
+    }
+    
+    public byte[] getCode() {
+        return this.code;
+    }
+}

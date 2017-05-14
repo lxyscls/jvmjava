@@ -53,13 +53,7 @@ public class ClassFile {
         switch(majorVersion) {
             case 45:
                 break;
-            case 46:
-            case 47:
-            case 48:
-            case 49:
-            case 50:
-            case 51:
-            case 52:
+            case 46: case 47: case 48: case 49: case 50: case 51: case 52:
                 if (minorVersion != 0) {
                     throw new UnsupportedClassVersionError(
                             Integer.toString(majorVersion) + Integer.toString(minorVersion));

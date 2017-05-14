@@ -17,9 +17,9 @@ class Swap extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        Object o1 = stack.popRef();
-        Object o2 = stack.popRef();
-        stack.pushRef(o1);
-        stack.pushRef(o2);
+        Object o1 = stack.popObject();
+        Object o2 = stack.popObject();
+        stack.pushObject(o1);
+        stack.pushObject(o2);
     }
 }

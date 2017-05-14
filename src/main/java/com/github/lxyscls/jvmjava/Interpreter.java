@@ -12,19 +12,19 @@ import com.github.lxyscls.jvmjava.classfile.MemberInfo;
 import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.Jthread;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 
 /**
  *
  * @author sk-xinyilong
  */
 public class Interpreter {
-    public static void interpret(MemberInfo methodInfo) {
-        CodeAttributeInfo info = (CodeAttributeInfo)methodInfo.getCodeAttribute();
+    public static void interpret(Method method) {
         Jthread thread = new Jthread();
-        Frame frame = new Frame(thread, info.getMaxLocals(), info.getMaxStack());
+        Frame frame = new Frame(thread, method);
         thread.pushFrame(frame);
         
-        loop(thread, info.getCode());
+        loop(thread, method.getCode());
     }
     
     static void loop(Jthread thread, byte[] code) {

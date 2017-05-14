@@ -19,16 +19,16 @@ class Dup2 extends NoOperandByteCode {
         OperandStack stack = frame.getOperandStack();
         if (!(stack.getTop() instanceof Long || 
                 stack.getTop() instanceof Double)) {
-            Object o1 = stack.popRef();
-            Object o2 = stack.popRef();
-            stack.pushRef(o2);
-            stack.pushRef(o1);
-            stack.pushRef(o2);
-            stack.pushRef(o1);
+            Object o1 = stack.popObject();
+            Object o2 = stack.popObject();
+            stack.pushObject(o2);
+            stack.pushObject(o1);
+            stack.pushObject(o2);
+            stack.pushObject(o1);
         } else {
-            Object o = stack.popRef();
-            stack.pushRef(o);
-            stack.pushRef(o);
+            Object o = stack.popObject();
+            stack.pushObject(o);
+            stack.pushObject(o);
         }
     }
 }
@@ -39,20 +39,20 @@ class Dup2X1 extends NoOperandByteCode {
         OperandStack stack = frame.getOperandStack();
         if (!(stack.getTop() instanceof Long || 
                 stack.getTop() instanceof Double)) {
-            Object o1 = stack.popRef();
-            Object o2 = stack.popRef();
-            Object o3 = stack.popRef();
-            stack.pushRef(o2);
-            stack.pushRef(o1);
-            stack.pushRef(o3);
-            stack.pushRef(o2);
-            stack.pushRef(o1);
+            Object o1 = stack.popObject();
+            Object o2 = stack.popObject();
+            Object o3 = stack.popObject();
+            stack.pushObject(o2);
+            stack.pushObject(o1);
+            stack.pushObject(o3);
+            stack.pushObject(o2);
+            stack.pushObject(o1);
         } else {
-            Object o1 = stack.popRef();
-            Object o2 = stack.popRef();
-            stack.pushRef(o1);
-            stack.pushRef(o2);
-            stack.pushRef(o1);            
+            Object o1 = stack.popObject();
+            Object o2 = stack.popObject();
+            stack.pushObject(o1);
+            stack.pushObject(o2);
+            stack.pushObject(o1);            
         }
     }
 }
@@ -61,41 +61,41 @@ class Dup2X2 extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        Object o1 = stack.popRef();
-        Object o2 = stack.popRef();
+        Object o1 = stack.popObject();
+        Object o2 = stack.popObject();
         if ((o1 instanceof Long || o1 instanceof Double) &&
                 !(o2 instanceof Long || o2 instanceof Double) &&
                 !(stack.getTop() instanceof Long ||
                 stack.getTop() instanceof Double)) { // II
-            Object o3 = stack.popRef();
-            stack.pushRef(o1);
-            stack.pushRef(o3);
-            stack.pushRef(o2);
-            stack.pushRef(o1);            
+            Object o3 = stack.popObject();
+            stack.pushObject(o1);
+            stack.pushObject(o3);
+            stack.pushObject(o2);
+            stack.pushObject(o1);            
         } else if (!(o1 instanceof Long || o1 instanceof Double) &&
                 !(o2 instanceof Long || o2 instanceof Double) &&
                 (stack.getTop() instanceof Long ||
                 stack.getTop() instanceof Double)) { // III
-            Object o3 = stack.popRef();
-            stack.pushRef(o2);
-            stack.pushRef(o1);
-            stack.pushRef(o3);
-            stack.pushRef(o2);
-            stack.pushRef(o1);            
+            Object o3 = stack.popObject();
+            stack.pushObject(o2);
+            stack.pushObject(o1);
+            stack.pushObject(o3);
+            stack.pushObject(o2);
+            stack.pushObject(o1);            
         } else if ((o1 instanceof Long || o1 instanceof Double) &&
                 (o2 instanceof Long || o2 instanceof Double)) { // IV
-            stack.pushRef(o1);
-            stack.pushRef(o2);
-            stack.pushRef(o1);
+            stack.pushObject(o1);
+            stack.pushObject(o2);
+            stack.pushObject(o1);
         } else { // I
-            Object o3 = stack.popRef();
-            Object o4 = stack.popRef();
-            stack.pushRef(o2);
-            stack.pushRef(o1);
-            stack.pushRef(o4);
-            stack.pushRef(o3);
-            stack.pushRef(o2);
-            stack.pushRef(o1);            
+            Object o3 = stack.popObject();
+            Object o4 = stack.popObject();
+            stack.pushObject(o2);
+            stack.pushObject(o1);
+            stack.pushObject(o4);
+            stack.pushObject(o3);
+            stack.pushObject(o2);
+            stack.pushObject(o1);            
         }
     }
 }

@@ -9,6 +9,5 @@ package com.github.lxyscls.jvmjava.classfile.attribute;
  *
  * @author sk-xinyilong
  */
-public abstract class AttributeInfo {
-    
+public abstract class AttributeInfo { 
 }

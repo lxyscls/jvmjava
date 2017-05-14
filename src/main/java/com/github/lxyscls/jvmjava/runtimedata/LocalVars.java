@@ -5,6 +5,8 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
+
 /**
  *
  * @author sk-xinyilong
@@ -48,12 +50,12 @@ public class LocalVars {
         return (Double)slots[index];
     }
     
-    public void setRef(int index, Object ref) {
-        slots[index] = ref;
+    public void setRef(int index, Jobject ref) {
+        slots[index] = (Object)ref;
     }
     
-    public Object getRef(int index) {
-        return slots[index];
+    public Jobject getRef(int index) {
+        return (Jobject) slots[index];
     }
     
     @Override

@@ -17,4 +17,8 @@ public class ConstantIntegerInfo extends ConstantInfo {
     ConstantIntegerInfo(ClassReader reader) {
         val = (int)reader.readUint32();        
     }
+    
+    public Integer getValue() {
+        return val;
+    }
 }

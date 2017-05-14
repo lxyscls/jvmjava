@@ -14,7 +14,11 @@ import com.github.lxyscls.jvmjava.classfile.ClassReader;
 public class ConstantDoubleInfo extends ConstantInfo {
     private final double val;
 
-    public ConstantDoubleInfo(ClassReader reader) {
+    ConstantDoubleInfo(ClassReader reader) {
         val = reader.readUint64().doubleValue();
     }    
+    
+    public Double getValue() {
+        return val;
+    } 
 }

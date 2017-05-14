@@ -5,6 +5,8 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
+
 /**
  *
  * @author sk-xinyilong
@@ -13,14 +15,16 @@ public class Frame {
     Frame lower;
     private final LocalVars localVars;
     private final OperandStack operandStack;
+    private final Method method;
     private final Jthread thread;
     private int nextPc;
     
-    public Frame(Jthread thread, int maxLocals, int maxStack) {
+    public Frame(Jthread thread, Method method) {
         this.thread = thread;
         this.nextPc = 0;
-        localVars = new LocalVars(maxLocals);
-        operandStack = new OperandStack(maxStack);
+        this.method = method;
+        localVars = new LocalVars(this.method.getMaxLocals());
+        operandStack = new OperandStack(this.method.getMaxStack());
     }
     
     public OperandStack getOperandStack() {
@@ -41,5 +45,9 @@ public class Frame {
     
     public Jthread getThread() {
         return this.thread;
+    }
+    
+    public Method getMethod() {
+        return this.method;
     }
 }

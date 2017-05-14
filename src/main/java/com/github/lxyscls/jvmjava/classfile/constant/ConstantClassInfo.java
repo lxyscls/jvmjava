@@ -11,7 +11,7 @@ import com.github.lxyscls.jvmjava.classfile.ClassReader;
  *
  * @author sk-xinyilong
  */
-class ConstantClassInfo extends ConstantInfo {
+public class ConstantClassInfo extends ConstantInfo {
     private final ConstantPool cp;
     private final int nameIndex;
     

@@ -17,7 +17,7 @@ class Pop extends NoOperandByteCode {
     public void execute(Frame frame) {
         if (!(frame.getOperandStack().getTop() instanceof Long ||
                 frame.getOperandStack().getTop() instanceof Double)) {
-            frame.getOperandStack().popRef();
+            frame.getOperandStack().popObject();
         }
     }
 }
@@ -27,7 +27,10 @@ class Pop2 extends NoOperandByteCode {
     public void execute(Frame frame) {
         if (frame.getOperandStack().getTop() instanceof Long ||
                 frame.getOperandStack().getTop() instanceof Double) {
-            frame.getOperandStack().popRef();
+            frame.getOperandStack().popObject();
+        } else {
+            frame.getOperandStack().popObject();
+            frame.getOperandStack().popObject();
         }
     }
 }

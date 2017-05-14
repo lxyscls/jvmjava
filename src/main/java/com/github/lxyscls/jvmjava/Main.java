@@ -5,10 +5,10 @@
  */
 package com.github.lxyscls.jvmjava;
 
-import com.github.lxyscls.jvmjava.classfile.ClassFile;
-import com.github.lxyscls.jvmjava.classfile.ClassReader;
-import com.github.lxyscls.jvmjava.classfile.MemberInfo;
-import com.github.lxyscls.jvmjava.classpath.Classpath;
+import com.github.lxyscls.jvmjava.classpath.ClassPath;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.ClassLoader;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 
@@ -34,49 +34,13 @@ public class Main {
     }
     
     static void startJVM(Cmd cmd) throws IOException {
-        Classpath cp = new Classpath(cmd.XjreOption, cmd.cpOption);
-        byte[] classData = cp.readClass(cmd.runClass.replace(".", "/"));
-        if (classData != null) {
-            ClassFile cf = new ClassFile(new ClassReader(classData));
-            printClassInfo(cf);
-            MemberInfo mainMethod = getMainMethod(cf);
-            if (mainMethod != null) {
-                Interpreter.interpret(mainMethod);
-            } else {
-                System.out.println("Can't find main method");
-            }
+        ClassLoader cl = new ClassLoader(new ClassPath(cmd.XjreOption, cmd.cpOption));
+        Jclass cls = cl.loadClass(cmd.runClass.replace(".", "/"));
+        Method method = cls.getMainMethod();
+        if (method != null) {
+            Interpreter.interpret(method);
         } else {
-            System.out.println("Can't read Class File");
+            System.out.printf("Main method not found in class %s\n", cls.getClassName());
         }
-    }
-    
-    static void printClassInfo(ClassFile cf) {
-        System.out.printf("version: %d.%d\n", cf.getMajorVersion(), cf.getMinorVersion());
-        System.out.printf("constants count: %d\n", cf.getConstantPool().getPoolSize());
-        System.out.printf("access flags: 0x%x\n", cf.getAccessFlags());
-        System.out.printf("this class: %s\n", cf.getClassName());
-        System.out.printf("super class: %s\n", cf.getSuperClassName());
-        System.out.printf("interfaces: ");
-        for (String intfName : cf.getInterfaceNames()) {
-            System.out.printf(" %s ", intfName);
-        }
-        System.out.printf("\n");
-        System.out.printf("fields count: %d\n", cf.getFields().length);
-        for (MemberInfo mInfo : cf.getFields()) {
-            System.out.printf(" %s %s\n", mInfo.getName(), mInfo.getDescriptor());
-        }
-        System.out.printf("methods count: %d\n", cf.getMethods().length);
-        for (MemberInfo mInfo : cf.getMethods()) {
-            System.out.printf(" %s %s\n", mInfo.getName(), mInfo.getDescriptor());
-        }
-    }
-    
-    static MemberInfo getMainMethod(ClassFile cf) {
-        for (MemberInfo mInfo : cf.getMethods()) {
-            if (mInfo.getName().equals("main") && mInfo.getDescriptor().equals("([Ljava/lang/String;)V")) {
-                return mInfo;
-            }
-        }
-        return null;
     }
 }

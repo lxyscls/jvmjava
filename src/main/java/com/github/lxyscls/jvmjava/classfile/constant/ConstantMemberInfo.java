@@ -16,7 +16,7 @@ public class ConstantMemberInfo extends ConstantInfo {
     private final int classIndex;
     private final int nameAndTypeIndex;
 
-    public ConstantMemberInfo(ClassReader reader, ConstantPool cp) {
+    ConstantMemberInfo(ClassReader reader, ConstantPool cp) {
         this.cp = cp;
         classIndex = reader.readUint16();
         nameAndTypeIndex = reader.readUint16();

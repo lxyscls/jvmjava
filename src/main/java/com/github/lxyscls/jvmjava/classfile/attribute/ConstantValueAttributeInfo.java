@@ -14,10 +14,14 @@ import com.github.lxyscls.jvmjava.classfile.constant.ConstantPool;
  */
 public class ConstantValueAttributeInfo extends AttributeInfo {
     private final ConstantPool cp;
-    private final int constantvalueIndex;
+    private final int constantValueIndex;
     
     public ConstantValueAttributeInfo(ClassReader reader, ConstantPool cp) {
         this.cp = cp;
-        constantvalueIndex = reader.readUint16();
+        constantValueIndex = reader.readUint16();
+    }
+    
+    public int getConstantValueIndex() {
+        return this.constantValueIndex;
     }
 }

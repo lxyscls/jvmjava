@@ -15,7 +15,7 @@ public class ConstantStringInfo extends ConstantInfo {
     private final int stringIndex;
     private final ConstantPool cp;
 
-    public ConstantStringInfo(ClassReader reader, ConstantPool cp) {
+    ConstantStringInfo(ClassReader reader, ConstantPool cp) {
         this.cp = cp;
         stringIndex = reader.readUint16();
     }

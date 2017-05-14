@@ -5,7 +5,7 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata;
 
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Deque;
 
 /**
@@ -17,7 +17,7 @@ public class Jthread {
     private final Deque<Frame> stack;
 
     public Jthread() {
-        this.stack = new ArrayDeque<>();
+        this.stack = new LinkedList<>();
     }
     
     public void pushFrame(Frame frame) {

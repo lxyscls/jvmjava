@@ -20,9 +20,15 @@ public class Method extends ClassMember {
     public Method(MemberInfo info) {
         super(info);
         CodeAttributeInfo codeInfo = info.getCodeAttribute();
-        maxLocals = codeInfo.getMaxLocals();
-        maxStack = codeInfo.getMaxStack();
-        code = codeInfo.getCode();
+        if (codeInfo != null) {
+            this.maxLocals = codeInfo.getMaxLocals();
+            this.maxStack = codeInfo.getMaxStack();
+            this.code = codeInfo.getCode();
+        } else {
+            this.maxLocals = 0;
+            this.maxStack = 0;
+            this.code = null;
+        }
     }
     
     public int getMaxLocals() {

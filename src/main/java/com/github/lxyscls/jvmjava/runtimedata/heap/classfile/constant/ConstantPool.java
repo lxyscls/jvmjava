@@ -30,7 +30,7 @@ public class ConstantPool {
         
         int cpCount = cfCp.getPoolSize();
         consts = new Object[cpCount];
-        for (int i = 0; i < cpCount; i++) {
+        for (int i = 1; i < cpCount; i++) {
             ConstantInfo info = cfCp.getConstantInfo(i);
             if (info instanceof ConstantIntegerInfo) {
                 consts[i] = ((ConstantIntegerInfo) info).getValue();

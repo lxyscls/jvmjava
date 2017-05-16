@@ -8,8 +8,6 @@ package com.github.lxyscls.jvmjava;
 import com.github.lxyscls.jvmjava.bytecode.base.ByteCode;
 import com.github.lxyscls.jvmjava.bytecode.base.ByteCodeReader;
 import com.github.lxyscls.jvmjava.bytecode.base.ByteCodes;
-import com.github.lxyscls.jvmjava.classfile.MemberInfo;
-import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.Jthread;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
@@ -39,6 +37,9 @@ public class Interpreter {
                 reader.reset(code, pc);
                 short opcode = reader.readUint8();
                 ByteCode bc = ByteCodes.newByteCode(opcode);
+                if (bc == null) {
+                    throw new UnsupportedOperationException();
+                }
                 bc.fetchOperands(reader);
                 frame.setNextPc(reader.getPc());
 

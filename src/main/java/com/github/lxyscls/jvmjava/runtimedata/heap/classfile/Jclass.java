@@ -163,7 +163,7 @@ public class Jclass {
     public Method getMainMethod() {
         for (Method method : methods) {
             if (method.isStatic() && method.getName().equals("main") &&
-                    method.getDescriptor().equals("(Ljava/lang/String;)V")) {
+                    method.getDescriptor().equals("([Ljava/lang/String;)V")) {
                 return method;
             }
         }

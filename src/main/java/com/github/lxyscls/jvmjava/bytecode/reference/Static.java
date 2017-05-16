@@ -59,7 +59,8 @@ class GetStatic extends Index16ByteCode {
                 throw new IncompatibleClassChangeError();
             }
 
-            frame.getOperandStack().pushObject(cls.getStaticVars()[field.getSlotId()]);
+            frame.getOperandStack().pushObject(field.getBelongClass()
+                    .getStaticVars()[field.getSlotId()]);
         } catch (IOException | IllegalAccessException | NoSuchFieldException ex) {
             System.err.println(ex);
             System.exit(-1);

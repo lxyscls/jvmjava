@@ -7,6 +7,7 @@ package com.github.lxyscls.jvmjava.classpath;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipFile;
 
@@ -29,7 +30,13 @@ class ZipEntry extends Entry {
             java.util.zip.ZipEntry ze = ez.nextElement();
             if (className.equals(ze.toString())) {
                 ret = new byte[(int)ze.getSize()];
-                zf.getInputStream(ze).read(ret);
+                
+                InputStream is = zf.getInputStream(ze);
+                int len = ret.length;
+                int offset = 0;
+                while (offset < len) {
+                    offset += is.read(ret, offset, len-offset);  
+                }
                 return ret;
             }
         }

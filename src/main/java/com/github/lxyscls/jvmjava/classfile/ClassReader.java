@@ -47,8 +47,8 @@ public class ClassReader {
     
     public int[] readUint16s() {
         int[] s = new int[readUint16()];
-        for (int i : s) {
-            i = readUint16();
+        for (int i = 0; i < s.length; i++) {
+            s[i] = readUint16();
         }
         return s;
     }

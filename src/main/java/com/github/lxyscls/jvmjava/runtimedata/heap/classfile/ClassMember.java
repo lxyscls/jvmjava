@@ -48,6 +48,14 @@ public class ClassMember {
         return (accessFlags & AccessFlags.ACC_SYNTHETIC) != 0;
     }
     
+    public boolean isAbstract() {
+        return (accessFlags & AccessFlags.ACC_ABSTRACT) != 0;
+    }    
+    
+    public boolean isNative() {
+        return (accessFlags & AccessFlags.ACC_NATIVE) != 0;
+    }
+    
     public Jclass getBelongClass() {
         return this._class;
     }
@@ -70,7 +78,7 @@ public class ClassMember {
         }
         
         if (isProtected()) {
-            return cls == this._class || cls.isSubclassOf(this._class) ||
+            return cls == this._class || cls.isSubClassOf(this._class) ||
                     cls.getPackageName().equals(this._class.getPackageName());
         }
         

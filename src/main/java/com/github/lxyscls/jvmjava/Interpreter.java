@@ -22,19 +22,18 @@ public class Interpreter {
         Frame frame = new Frame(thread, method);
         thread.pushFrame(frame);
         
-        loop(thread, method.getCode());
+        loop(thread);
     }
     
-    static void loop(Jthread thread, byte[] code) {
-        Frame frame = thread.popFrame();
+    static void loop(Jthread thread) {
         ByteCodeReader reader = new ByteCodeReader();
         
         while (true) {
+            Frame frame = thread.currentFrame();
+            int pc = frame.getNextPc();
+            thread.setPc(pc);           
             try {
-                int pc = frame.getNextPc();
-                thread.setPc(pc);
-
-                reader.reset(code, pc);
+                reader.reset(frame.getMethod().getCode(), pc);
                 short opcode = reader.readUint8();
                 ByteCode bc = ByteCodes.newByteCode(opcode);
                 if (bc == null) {
@@ -42,9 +41,16 @@ public class Interpreter {
                 }
                 bc.fetchOperands(reader);
                 frame.setNextPc(reader.getPc());
-
-                System.out.printf("pc: %2d bytecode: %s val: %s\n", pc, bc.getClass().getSimpleName(), bc.toString());
+                
+                System.out.printf("%s.%s() pc: %2d bytecode: %s val: %s\n", 
+                        frame.getMethod().getBelongClass().getClassName(),
+                        frame.getMethod().getName(),
+                        pc, bc.getClass().getSimpleName(), bc.toString());
+                
                 bc.execute(frame);
+                if (thread.isStackEmpty()) {
+                    break;
+                }
             } catch (UnsupportedOperationException ex) {
                 System.out.printf("localVars: %s\n", frame.getLocalVars());
                 System.out.printf("operandStack: %s\n", frame.getOperandStack());

@@ -25,10 +25,6 @@ public class SymRef {
     }
     
     private void resolveClassRef() throws IOException, IllegalAccessException {
-        if (this._class != null) {
-            return;
-        }
-        
         Jclass cls = this.cp.getBelongClass();
         Jclass ret = cls.getClassLoader().loadClass(className);
         if (!ret.isAccessibleTo(cls)) {

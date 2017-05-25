@@ -20,6 +20,8 @@ public class References {
             case 0xb5: return new PutField();
             case 0xb6: return new InvokeVirtual();
             case 0xb7: return new InvokeSpecial();
+            case 0xb8: return new InvokeStatic();
+            case 0xb9: return new InvokeInterface();
             case 0xbb: return new New();
             case 0xc0: return new Checkcast();
             case 0xc1: return new Instanceof();

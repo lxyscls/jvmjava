@@ -27,6 +27,13 @@ class PutStatic extends Index16ByteCode {
         
         try {
             Field field = fr.resolvedField();
+            Jclass fcls = field.getBelongClass();
+            if (!fcls.getInitStarted()) {
+                frame.revertNextPc();
+                fcls.clInitClass(frame);
+                return;
+            } 
+
             if (!field.isStatic()) {
                 throw new IncompatibleClassChangeError();
             }
@@ -55,6 +62,13 @@ class GetStatic extends Index16ByteCode {
         
         try {
             Field field = fr.resolvedField();
+            Jclass fcls = field.getBelongClass();            
+            if (!fcls.getInitStarted()) {
+                frame.revertNextPc();
+                fcls.clInitClass(frame);
+                return;
+            }
+                        
             if (!field.isStatic()) {
                 throw new IncompatibleClassChangeError();
             }

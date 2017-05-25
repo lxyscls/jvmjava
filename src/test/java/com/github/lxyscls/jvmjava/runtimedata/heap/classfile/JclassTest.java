@@ -96,7 +96,7 @@ public class JclassTest {
         Jclass cls = cl.loadClass("java/lang/Object");
         Jclass instance = cl.loadClass("java/lang/String");
         boolean expResult = true;
-        boolean result = instance.isSubclassOf(cls);
+        boolean result = instance.isSubClassOf(cls);
         assertEquals(expResult, result);
     }
 

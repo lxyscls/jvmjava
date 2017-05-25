@@ -10,6 +10,8 @@ import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ClassRef;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
 import java.io.IOException;
 
 /**
@@ -23,6 +25,12 @@ public class New extends Index16ByteCode {
         ClassRef cr = (ClassRef)cp.getConst(index);
         try {
             Jclass cls = cr.resolvedClass();
+            if (!cls.getInitStarted()) {
+                frame.revertNextPc();
+                cls.clInitClass(frame);
+                return;
+            }            
+            
             if (cls.isAbstract() || cls.isInterface()) {
                 throw new InstantiationError();
             }

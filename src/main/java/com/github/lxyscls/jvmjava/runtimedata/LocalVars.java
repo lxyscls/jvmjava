@@ -58,6 +58,14 @@ public class LocalVars {
         return (Jobject) slots[index];
     }
     
+    public void setObject(int index, Object obj) {
+        slots[index] = obj;
+    }
+    
+    public Object getObject(int index) {
+        return slots[index];
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

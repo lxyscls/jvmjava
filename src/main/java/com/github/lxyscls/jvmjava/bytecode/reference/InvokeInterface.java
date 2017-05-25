@@ -5,33 +5,38 @@
  */
 package com.github.lxyscls.jvmjava.bytecode.reference;
 
+import com.github.lxyscls.jvmjava.bytecode.base.ByteCodeReader;
 import com.github.lxyscls.jvmjava.bytecode.base.Index16ByteCode;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.InterfaceMethodRef;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodRef;
 import java.io.IOException;
 
 /**
  *
  * @author sk-xinyilong
  */
-public class InvokeSpecial extends Index16ByteCode {
+public class InvokeInterface extends Index16ByteCode {
+    @Override
+    public void fetchOperands(ByteCodeReader reader) {
+        super.fetchOperands(reader);
+        reader.readUint8();
+        reader.readUint8();
+    }
+            
     @Override
     public void execute(Frame frame) {
         Jclass cls = frame.getMethod().getBelongClass();
-        MethodRef mr = (MethodRef)cls.getConstantPool().getConst(index);
+        InterfaceMethodRef mr = (InterfaceMethodRef)cls.getConstantPool().getConst(index);
         try {
-            Method method = mr.resolvedMethod();
+            Method method = mr.resolvedInterfaceMethod();
             Jclass mcls = mr.resolvedClass();
             
-            if (method.isStatic()) {
+            if (method.isStatic() || method.isPrivate()) {
                 throw new IncompatibleClassChangeError();
-            }
-            if ("<init>".equals(method.getName()) && method.getBelongClass() != mcls) {
-                throw new NoSuchMethodError();
             }
             
             Object[] slots = new Object[method.getArgCount()];
@@ -42,20 +47,13 @@ public class InvokeSpecial extends Index16ByteCode {
             if (ref == null) {
                 throw new NullPointerException();
             }
-
-            if (method.isProtected() && mcls.isSuperClassof(cls) &&
-                    !mcls.getPackageName().equals(cls.getPackageName()) &&
-                    ref.getBelongClass() != cls && 
-                    !ref.getBelongClass().isSubClassOf(cls)) {
-                throw new IllegalAccessError();
-            }
- 
-            if (cls.isSuper() && mcls.isSuperClassof(cls) && 
-                    !method.getName().equals("<init>")) {
-                method = MethodLookup.lookupMethodInClass(cls.getSuperClass(), 
-                        mr.getName(), mr.getDescriptor());
+            
+            if (!ref.getBelongClass().isImplements(mcls)) {
+                throw new IncompatibleClassChangeError();
             }
             
+            method = MethodLookup.lookupMethodInClass(ref.getBelongClass(), 
+                mr.getName(), mr.getDescriptor());
             if (method == null || method.isAbstract()) {
                 throw new AbstractMethodError();
             }
@@ -82,4 +80,5 @@ public class InvokeSpecial extends Index16ByteCode {
             System.exit(-1);
         }
     }
+    
 }

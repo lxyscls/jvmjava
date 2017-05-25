@@ -37,6 +37,7 @@ public class ClassLoader {
         Jclass cls = defineClass(this.cp.readClass(name));
         link(cls);
         classMap.put(cls.getClassName(), cls);
+        System.out.printf("[Loaded %s]\n", cls.getClassName());
         return cls;
     }
     

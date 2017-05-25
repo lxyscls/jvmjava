@@ -23,6 +23,10 @@ public class Jobject {
     public Object[] getFields() {
         return this.fields;
     }
+    
+    public Jclass getBelongClass() {
+        return this._class;
+    }
 
     public boolean isInstanceOf(Jclass cls) {
         return cls.isAssignableFrom(this._class);

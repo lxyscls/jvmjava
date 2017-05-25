@@ -43,6 +43,10 @@ public class Frame {
         return this.nextPc;
     }
     
+    public void revertNextPc() {
+        this.nextPc = thread.getPc();
+    }
+    
     public Jthread getThread() {
         return this.thread;
     }

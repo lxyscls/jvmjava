@@ -16,9 +16,12 @@ public class Method extends ClassMember {
     private final int maxLocals;
     private final int maxStack;
     private final byte[] code;
+    private final MethodArgRet argRet;
     
     public Method(MemberInfo info) {
         super(info);
+        argRet = new MethodArgParser(descriptor).parse();
+        
         CodeAttributeInfo codeInfo = info.getCodeAttribute();
         if (codeInfo != null) {
             this.maxLocals = codeInfo.getMaxLocals();
@@ -41,5 +44,9 @@ public class Method extends ClassMember {
     
     public byte[] getCode() {
         return this.code;
+    }
+    
+    public int getArgCount() {
+        return this.argRet.getArgCount();
     }
 }

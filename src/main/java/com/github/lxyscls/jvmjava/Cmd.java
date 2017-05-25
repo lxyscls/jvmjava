@@ -42,6 +42,7 @@ class Cmd {
         CommandLine cl = parser.parse(options, args);
         cmd.helpFlag = cl.hasOption("help") || cl.hasOption("?");
         cmd.versionFlag = cl.hasOption("version");
+
         if (cl.hasOption("classpath")) {
             cmd.cpOption = cl.getOptionValue("classpath");
         } else if (cl.hasOption("cp")) {
@@ -50,7 +51,7 @@ class Cmd {
         if (cl.hasOption("Xjre")) {
             cmd.XjreOption = cl.getOptionValue("Xjre");
         }
-            
+         
         String[] leftOverArgs = cl.getArgs();
         if (leftOverArgs.length > 0) {
             cmd.runClass = leftOverArgs[0];

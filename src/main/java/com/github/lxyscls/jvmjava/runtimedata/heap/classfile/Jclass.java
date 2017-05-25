@@ -8,8 +8,10 @@ package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import com.github.lxyscls.jvmjava.classfile.ClassFile;
 import com.github.lxyscls.jvmjava.classfile.MemberInfo;
+import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.AccessFlags;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
 
 /**
  *
@@ -30,6 +32,8 @@ public class Jclass {
     private int instanceFieldCount;
     private int staticFieldCount;
     private Object[] staticVars;
+    
+    private boolean initStarted;
     
     public Jclass(ClassFile cf) {
         accessFlags = cf.getAccessFlags();
@@ -148,6 +152,10 @@ public class Jclass {
         return this.fields;
     }
     
+    public Method[] getMethods() {
+        return this.methods;
+    }
+    
     public Object[] getStaticVars() {
         return this.staticVars;
     }
@@ -186,7 +194,7 @@ public class Jclass {
         return "";
     }
     
-    public boolean isSubclassOf(Jclass cls) {
+    public boolean isSubClassOf(Jclass cls) {
         for (Jclass _cls = this.getSuperClass(); _cls != null; _cls = _cls.getSuperClass()) {
             if (_cls == cls) {
                 return true;
@@ -195,7 +203,7 @@ public class Jclass {
         return false;
     }
     
-    private boolean isSubInterfaceOf(Jclass cls) {
+    public boolean isSubInterfaceOf(Jclass cls) {
         for (Jclass _cls : this.getInterfaceClasses()) {
             if (_cls == cls || _cls.isSubInterfaceOf(cls)) {
                 return true;
@@ -204,7 +212,7 @@ public class Jclass {
         return false;
     }
     
-    private boolean isImplements(Jclass cls) {
+    public boolean isImplements(Jclass cls) {
         for (Jclass _cls = this; _cls != null; _cls = _cls.getSuperClass()) {
             if (_cls.isSubInterfaceOf(cls)) {
                 return true;
@@ -219,9 +227,31 @@ public class Jclass {
         }
         
         if (!isInterface()) {
-            return cls.isSubclassOf(this);
+            return cls.isSubClassOf(this);
         } else {
             return cls.isImplements(this);
+        }
+    }
+    
+    public boolean isSuperClassof(Jclass cls) {
+        return cls.isSubClassOf(this);
+    }
+    
+    public boolean getInitStarted() {
+        return this.initStarted;
+    }
+    
+    public void clInitClass(Frame frame) {
+        this.initStarted = true;
+        Method clinit = MethodLookup.lookupMethodInClass(this, "<clinit>", "()V");
+        if (clinit != null) {
+            Frame newFrame = new Frame(frame.getThread(), clinit);
+            frame.getThread().pushFrame(newFrame);
+        }
+        if (!this.isInterface()) {
+            if (superClass != null && !superClass.getInitStarted()) {
+                superClass.clInitClass(frame);
+            }
         }
     }
 }

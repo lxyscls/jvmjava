@@ -48,7 +48,7 @@ public class CmdTest {
 
         String args6[] = {"-Xjre", "C:\\Program Files\\Java\\jdk1.8.0_91\\jre"};
         Cmd cmd6 = Cmd.parseCmd(args6);
-        assertEquals(cmd6.XjreOption, args6[1]);
+        assertEquals(cmd6.XjreOption, args6[1]);      
     }
     
     @Test (expected = ParseException.class)

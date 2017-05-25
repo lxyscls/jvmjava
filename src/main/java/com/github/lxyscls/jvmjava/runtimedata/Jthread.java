@@ -35,6 +35,10 @@ public class Jthread {
         return stack.peekFirst();
     }
     
+    public boolean isStackEmpty() {
+        return stack.isEmpty();
+    }
+    
     public int getPc() {
        return pc; 
     }

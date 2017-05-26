@@ -17,7 +17,7 @@ class Isub extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushInt(stack.popInt() - stack.popInt());
+        stack.pushInt(-stack.popInt() + stack.popInt());
     }
 }
 
@@ -25,7 +25,7 @@ class Lsub extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushLong(stack.popLong() - stack.popLong());
+        stack.pushLong(-stack.popLong() + stack.popLong());       
     }    
 }
 
@@ -33,7 +33,7 @@ class Fsub extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushFloat(stack.popFloat() - stack.popFloat());
+        stack.pushFloat(-stack.popFloat() + stack.popFloat());
     }    
 }
 
@@ -41,6 +41,6 @@ class Dsub extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushDouble(stack.popDouble() - stack.popDouble());
+        stack.pushDouble(-stack.popDouble() + stack.popDouble());
     }    
 }

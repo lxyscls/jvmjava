@@ -79,6 +79,9 @@ public class InvokeVirtual extends Index16ByteCode {
             
             if (method.isNative()) {
                 if ("registerNatives".equals(method.getName())) {
+                    System.out.printf("native method: %s %s %s\n", 
+                            method.getBelongClass().getClassName(),
+                            method.getName(), method.getDescriptor());                        
                     frame.getThread().popFrame();
                 } else {
                     System.err.printf("native method: %s %s %s", 

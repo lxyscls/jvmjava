@@ -17,7 +17,9 @@ class Irem extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushInt(stack.popInt() % stack.popInt());
+        Integer value2 = stack.popInt();
+        Integer value1 = stack.popInt();
+        stack.pushInt(value1 % value2);
     }
 }
 
@@ -25,7 +27,9 @@ class Lrem extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushLong(stack.popLong() % stack.popLong());
+        Long value2 = stack.popLong();
+        Long value1 = stack.popLong();        
+        stack.pushLong(value1 % value2);
     }    
 }
 
@@ -33,7 +37,9 @@ class Frem extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushFloat(stack.popFloat() % stack.popFloat());
+        Float value2 = stack.popFloat();
+        Float value1 = stack.popFloat();         
+        stack.pushFloat(value1 % value2);
     }    
 }
 
@@ -41,6 +47,8 @@ class Drem extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        stack.pushDouble(stack.popDouble() % stack.popDouble());
+        Double value2 = stack.popDouble();
+        Double value1 = stack.popDouble();          
+        stack.pushDouble(value1 % value2);
     }    
 }

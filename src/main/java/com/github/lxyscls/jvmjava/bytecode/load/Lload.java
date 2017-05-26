@@ -30,7 +30,7 @@ public class Lload extends Index8ByteCode implements WideByteCode {
 class Lload0 extends NoOperandByteCode {
     @Override
     public void execute(Frame frame) {
-        frame.getOperandStack().pushLong(frame.getLocalVars().getLong(0));
+        frame.getOperandStack().pushLong(frame.getLocalVars().getLong(0));   
     }
 }
 

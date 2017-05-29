@@ -31,7 +31,15 @@ public class Stores {
     static Astore0 ASTORE0 = new Astore0();
     static Astore1 ASTORE1 = new Astore1();
     static Astore2 ASTORE2 = new Astore2();
-    static Astore3 ASTORE3 = new Astore3();     
+    static Astore3 ASTORE3 = new Astore3();
+    static Iastore IASTORE = new Iastore();
+    static Lastore LASTORE = new Lastore();
+    static Fastore FASTORE = new Fastore();
+    static Dastore DASTORE = new Dastore();
+    static Aastore AASTORE = new Aastore();
+    static Bastore BASTORE = new Bastore();
+    static Castore CASTORE = new Castore();
+    static Sastore SASTORE = new Sastore();
   
     public static ByteCode newStore(short opCode) {
         switch (opCode) {
@@ -60,6 +68,14 @@ public class Stores {
             case 0x4c: return ASTORE1;
             case 0x4d: return ASTORE2;
             case 0x4e: return ASTORE3;
+            case 0x4f: return IASTORE;
+            case 0x50: return LASTORE;
+            case 0x51: return FASTORE;
+            case 0x52: return DASTORE;
+            case 0x53: return AASTORE;
+            case 0x54: return BASTORE;
+            case 0x55: return CASTORE;
+            case 0x56: return SASTORE;
         }
         return null;
     }    

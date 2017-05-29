@@ -12,6 +12,8 @@ import com.github.lxyscls.jvmjava.bytecode.base.ByteCode;
  * @author sk-xinyilong
  */
 public class References {
+    static ArrayLength ARRLEN = new ArrayLength();
+    
     public static ByteCode newReference(short opCode) {
         switch (opCode) {
             case 0xb2: return new GetStatic();
@@ -23,6 +25,9 @@ public class References {
             case 0xb8: return new InvokeStatic();
             case 0xb9: return new InvokeInterface();
             case 0xbb: return new New();
+            case 0xbc: return new NewArray();
+            case 0xbd: return new ANewArray();
+            case 0xbe: return ARRLEN;
             case 0xc0: return new Checkcast();
             case 0xc1: return new Instanceof();
         }

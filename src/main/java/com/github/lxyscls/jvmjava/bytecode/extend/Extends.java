@@ -15,6 +15,7 @@ public class Extends {
     public static ByteCode newExtend(short opCode) {
         switch (opCode) {
             case 0xc4: return new Wide();
+            case 0xc5: return new MultiANewArray();
             case 0xc6: return new IfNull();
             case 0xc7: return new IfNonNull();
             case 0xc8: return new GotoW();

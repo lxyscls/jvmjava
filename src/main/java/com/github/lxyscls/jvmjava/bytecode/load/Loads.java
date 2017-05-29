@@ -31,7 +31,15 @@ public class Loads {
     static Aload0 ALOAD0 = new Aload0();
     static Aload1 ALOAD1 = new Aload1();
     static Aload2 ALOAD2 = new Aload2();
-    static Aload3 ALOAD3 = new Aload3();     
+    static Aload3 ALOAD3 = new Aload3();
+    static Iaload IALOAD = new Iaload();
+    static Laload LALOAD = new Laload();
+    static Faload FALOAD = new Faload();
+    static Daload DALOAD = new Daload();
+    static Aaload AALOAD = new Aaload();
+    static Baload BALOAD = new Baload();
+    static Caload CALOAD = new Caload();
+    static Saload SALOAD = new Saload();    
   
     public static ByteCode newLoad(short opCode) {
         switch (opCode) {
@@ -60,6 +68,14 @@ public class Loads {
             case 0x2b: return ALOAD1;
             case 0x2c: return ALOAD2;
             case 0x2d: return ALOAD3;
+            case 0x2e: return IALOAD;
+            case 0x2f: return LALOAD;
+            case 0x30: return FALOAD;
+            case 0x31: return DALOAD;
+            case 0x32: return AALOAD;
+            case 0x33: return BALOAD;
+            case 0x34: return CALOAD;
+            case 0x35: return SALOAD;
         }
         return null;
     }

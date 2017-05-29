@@ -12,6 +12,8 @@ import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.AccessFlags;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -34,6 +36,21 @@ public class Jclass {
     private Object[] staticVars;
     
     private boolean initStarted;
+    
+    public Jclass(String name) {
+        accessFlags = AccessFlags.ACC_PUBLIC;
+        className = name;
+        superClassName = "java/lang/Object";
+        interfaceNames = new String[]{"java/lang/Cloneable", "java/io/Serializable"};
+        
+        cp = null;
+        fields = null;
+        methods = null;
+        superClass = null;
+        interfaces = null;
+        
+        initStarted = true;
+    }
     
     public Jclass(ClassFile cf) {
         accessFlags = cf.getAccessFlags();
@@ -177,10 +194,6 @@ public class Jclass {
         }
         return null;
     }
-    
-    public Jobject newObject() {
-        return new Jobject(this, instanceFieldCount);
-    }
 
     public boolean isAccessibleTo(Jclass cls) {
         return isPublic() || getPackageName().equals(cls.getPackageName());
@@ -253,5 +266,82 @@ public class Jclass {
                 superClass.clInitClass(frame);
             }
         }
+    }
+        
+    public Jobject newObject() {
+        return new Jobject(this, instanceFieldCount);
+    }
+    
+    public Jobject newArray(int count) {
+        switch (getClassName()) {
+            case "[B": return new Jobject(this, new Byte[count]);
+            case "[C": return new Jobject(this, new Character[count]);
+            case "[D": return new Jobject(this, new Double[count]);
+            case "[F": return new Jobject(this, new Float[count]);
+            case "[I": return new Jobject(this, new Integer[count]);
+            case "[J": return new Jobject(this, new Long[count]);
+            case "[S": return new Jobject(this, new Short[count]);
+            case "[Z": return new Jobject(this, new Byte[count]); // Share with Byte
+            default: return new Jobject(this, new Jobject[count]);
+        }
+    }
+    
+    public Jclass newArrayClass() throws IOException {
+        return loader.loadClass(getArrayClassName());
+    }
+    
+    private String getArrayClassName() {
+        if (getClassName().startsWith("[")) {
+            return "[" + getClassName();
+        }
+        
+        switch (getClassName()) {
+            case "void": return "[V";
+            case "boolean": return "[Z";
+            case "byte": return "[B";
+            case "short": return "[S";
+            case "int": return "[I";
+            case "long": return "[J";
+            case "char": return "[C";
+            case "float": return "[F";
+            case "double": return "[D";
+        }
+        return "[L" + getClassName() + ";";
+    }
+    
+    public Jobject newMultiDimensionalArray(int[] counts) throws IOException {
+        Jobject arrRef = newArray(counts[0]);
+        if (counts.length > 1) {
+            Jobject[] array = (Jobject[])arrRef.getArray();
+            for (int i = 0; i < array.length; i++) {
+                array[i] = newComponentClass().newMultiDimensionalArray(
+                        Arrays.copyOfRange(counts, 1, counts.length));
+            }
+        }
+        return arrRef;
+    }
+
+    public Jclass newComponentClass() throws IOException {
+        return loader.loadClass(getComponentClassName());
+    }
+
+    private String getComponentClassName() {
+        String subName = getClassName().substring(1);
+        if (subName.startsWith("L")) {
+            return subName.substring(1, subName.length()-1);
+        }
+        
+        switch (subName) {
+            case "V": return "void";
+            case "Z": return "boolean";
+            case "B": return "byte";
+            case "S": return "short";
+            case "I": return "int";
+            case "J": return "long";
+            case "C": return "char";
+            case "F": return "float";
+            case "D": return "double";
+        }
+        return subName;
     }
 }

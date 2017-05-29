@@ -14,14 +14,28 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 public class Jobject {
     Jclass _class;
     Object[] fields;
+    Object[] array;
     
     public Jobject(Jclass cls, int instanceFieldCount) {
         this._class = cls;
         fields = new Object[instanceFieldCount];
     }
     
+    public Jobject(Jclass cls, Object[] array) {
+        this._class = cls;
+        this.array = array;
+    }
+    
     public Object[] getFields() {
         return this.fields;
+    }
+    
+    public Object[] getArray() {
+        return this.array;
+    }
+    
+    public int getArrayLength() {
+        return this.array.length;
     }
     
     public Jclass getBelongClass() {

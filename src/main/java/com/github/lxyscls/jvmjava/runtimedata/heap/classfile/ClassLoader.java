@@ -30,14 +30,34 @@ public class ClassLoader {
         if (classMap.containsKey(name)) {
             return classMap.get(name);
         }
+        
+        if (name.startsWith("[")) {
+            return loadArrayClass(name);
+        }
         return loadNonArrayClass(name);
     }
+
+    private Jclass loadArrayClass(String name) throws IOException {
+        Jclass cls = defineClass(name);
+        
+        classMap.put(cls.getClassName(), cls);
+        System.out.printf("[Loaded %s]\n", cls.getClassName());
+        return cls;
+    }    
     
     private Jclass loadNonArrayClass(String name) throws IOException {
         Jclass cls = defineClass(this.cp.readClass(name));
         link(cls);
         classMap.put(cls.getClassName(), cls);
         System.out.printf("[Loaded %s]\n", cls.getClassName());
+        return cls;
+    }
+    
+    private Jclass defineClass(String name) throws IOException {
+        Jclass cls = new Jclass(name);
+        cls.setClassLoader(this);
+        resolveSuperClass(cls);
+        resolveInterfaces(cls);
         return cls;
     }
     

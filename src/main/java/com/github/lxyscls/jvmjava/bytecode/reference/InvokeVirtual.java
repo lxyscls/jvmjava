@@ -8,6 +8,7 @@ package com.github.lxyscls.jvmjava.bytecode.reference;
 import com.github.lxyscls.jvmjava.bytecode.base.Index16ByteCode;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jstring;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
@@ -47,6 +48,8 @@ public class InvokeVirtual extends Index16ByteCode {
                         case "(J)V": System.out.println((Long)slots[0]); break;
                         case "(F)V": System.out.println((Float)slots[0]); break;
                         case "(D)V": System.out.println((Double)slots[0]); break;
+                        case "(Ljava/lang/String;)V": 
+                            System.out.println(Jstring.internObjectToString((Jobject)slots[0]));break;
                         default: throw new NoSuchMethodError(mr.getDescriptor());
                     }
                     return;

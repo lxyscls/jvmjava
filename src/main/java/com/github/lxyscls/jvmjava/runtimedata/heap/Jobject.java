@@ -5,6 +5,7 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata.heap;
 
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Field;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 
 /**
@@ -44,5 +45,13 @@ public class Jobject {
 
     public boolean isInstanceOf(Jclass cls) {
         return cls.isAssignableFrom(this._class);
+    }
+    
+    public void setRefVar(String name, String descriptor, Jobject obj) {
+        fields[_class.getInstanceField(name, descriptor).getSlotId()] = obj;
+    }
+    
+    public Jobject getRefVar(String name, String descriptor) {
+        return (Jobject)fields[_class.getInstanceField(name, descriptor).getSlotId()];
     }
 }

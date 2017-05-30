@@ -10,19 +10,43 @@ import com.github.lxyscls.jvmjava.bytecode.base.ByteCodeReader;
 import com.github.lxyscls.jvmjava.bytecode.base.ByteCodes;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.Jthread;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jstring;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.ClassLoader;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
+import java.io.IOException;
 
 /**
  *
  * @author sk-xinyilong
  */
 public class Interpreter {
-    public static void interpret(Method method) {
+    public static void interpret(Method method, String[] args) {
         Jthread thread = new Jthread();
         Frame frame = new Frame(thread, method);
         thread.pushFrame(frame);
         
+        frame.getLocalVars().setRef(0, 
+                createArgsArrayRef(method.getBelongClass().getClassLoader(), args));
+        
         loop(thread);
+    }
+    
+    static Jobject createArgsArrayRef(ClassLoader loader, String[] args) {
+        try {
+            Jclass cls = loader.loadClass("java/lang/String").newArrayClass();
+            Jobject obj = cls.newArray(args.length);
+            Object[] array = obj.getArray();
+            for (int i = 0; i < array.length; i++) {
+                array[i] = Jstring.stringToInternObject(loader, args[i]);
+            }
+            return obj;
+        } catch (IOException ex) {
+            System.err.println(ex);
+            System.exit(-1);
+        }
+        return null;
     }
     
     static void loop(Jthread thread) {

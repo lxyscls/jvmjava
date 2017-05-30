@@ -344,4 +344,16 @@ public class Jclass {
         }
         return subName;
     }
+    
+    public Field getInstanceField(String name, String descriptor) {
+        for (Jclass cls = this; cls != null; cls = this.superClass) {
+            for (Field field : fields) {
+                if (!field.isStatic() && name.equals(field.getName()) 
+                        && descriptor.equals(field.getDescriptor())) {
+                    return field;
+                }
+            }
+        }
+        return null;
+    }
 }

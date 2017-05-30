@@ -8,6 +8,7 @@ package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
 import com.github.lxyscls.jvmjava.classfile.ClassFile;
 import com.github.lxyscls.jvmjava.classfile.ClassReader;
 import com.github.lxyscls.jvmjava.classpath.ClassPath;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jstring;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import java.io.IOException;
 import java.util.HashMap;
@@ -141,9 +142,14 @@ public class ClassLoader {
     private void initStaticFinalVar(Jclass cls, Field field) {
         Object[] staticVars = cls.getStaticVars();
         ConstantPool cp = cls.getConstantPool();
-        int constantValueIndex = field.getConstantValueIndex();
-        if (constantValueIndex > 0) {
-            staticVars[field.getSlotId()] = cp.getConst(constantValueIndex);
+        int index = field.getConstantValueIndex();
+        if (index > 0) {
+            if (field.getDescriptor().equals("Ljava/lang/String;")) {
+                staticVars[field.getSlotId()] = Jstring.stringToInternObject(this, 
+                        (String)cp.getConst(index));
+            } else {
+                staticVars[field.getSlotId()] = cp.getConst(index);
+            }
         }
     }
 }

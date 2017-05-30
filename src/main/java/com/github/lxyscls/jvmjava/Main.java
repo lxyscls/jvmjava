@@ -38,9 +38,9 @@ public class Main {
         Jclass cls = cl.loadClass(cmd.runClass.replace(".", "/"));
         Method method = cls.getMainMethod();
         if (method != null) {
-            Interpreter.interpret(method);
+            Interpreter.interpret(method, cmd.runClassArgs);
         } else {
-            System.out.printf("Main method not found in class %s\n", cls.getClassName());
+            System.out.printf("Main method not found in class %s\n", cmd.runClass);
         }
     }
 }

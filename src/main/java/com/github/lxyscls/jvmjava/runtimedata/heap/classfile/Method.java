@@ -13,10 +13,10 @@ import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
  * @author sk-xinyilong
  */
 public class Method extends ClassMember {
-    private final int maxLocals;
-    private final int maxStack;
-    private final byte[] code;
-    private final MethodArgRet argRet;
+    private int maxLocals;
+    private int maxStack;
+    private byte[] code;
+    private MethodArgRet argRet;
     
     public Method(MemberInfo info) {
         super(info);
@@ -24,13 +24,21 @@ public class Method extends ClassMember {
         
         CodeAttributeInfo codeInfo = info.getCodeAttribute();
         if (codeInfo != null) {
-            this.maxLocals = codeInfo.getMaxLocals();
-            this.maxStack = codeInfo.getMaxStack();
-            this.code = codeInfo.getCode();
-        } else {
-            this.maxLocals = 0;
-            this.maxStack = 0;
-            this.code = null;
+            maxLocals = codeInfo.getMaxLocals();
+            maxStack = codeInfo.getMaxStack();
+            code = codeInfo.getCode();
+        }
+        if (isNative()) {
+            maxLocals = getArgCount();
+            maxStack = 4;
+            switch (argRet.getRetType().charAt(0)) {
+                case 'J': code = new byte[] {(byte)0xfe, (byte)0xad}; break;                
+                case 'F': code = new byte[] {(byte)0xfe, (byte)0xae}; break;
+                case 'D': code = new byte[] {(byte)0xfe, (byte)0xaf}; break;
+                case 'V': code = new byte[] {(byte)0xfe, (byte)0xb1}; break;
+                case 'L': case '[': code = new byte[] {(byte)0xfe, (byte)0xb0}; break;
+                default:  code = new byte[] {(byte)0xfe, (byte)0xac}; break;
+            }
         }
     }
     
@@ -47,6 +55,10 @@ public class Method extends ClassMember {
     }
     
     public int getArgCount() {
-        return this.argRet.getArgCount();
+        if (isStatic()) {
+            return this.argRet.getArgCount();
+        } else {
+            return this.argRet.getArgCount()+1;
+        }
     }
 }

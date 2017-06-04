@@ -26,6 +26,7 @@ public class Main {
             } else if (cmd.helpFlag || cmd.runClass == null) {
                 Cmd.printUsage();
             } else {
+                registerRegitsterNatives();
                 startJVM(cmd);
             }
         } catch (ParseException ex) {
@@ -42,5 +43,11 @@ public class Main {
         } else {
             System.out.printf("Main method not found in class %s\n", cmd.runClass);
         }
+    }
+    
+    static void registerRegitsterNatives() {
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Class.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Object.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Insystem.init();        
     }
 }

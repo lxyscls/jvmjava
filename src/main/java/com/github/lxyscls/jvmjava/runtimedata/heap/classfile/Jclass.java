@@ -36,12 +36,19 @@ public class Jclass {
     private Object[] staticVars;
     
     private boolean initStarted;
+    private Jobject jClass;
+
     
-    public Jclass(String name) {
+    public Jclass(String name, boolean isArray) {
         accessFlags = AccessFlags.ACC_PUBLIC;
         className = name;
-        superClassName = "java/lang/Object";
-        interfaceNames = new String[]{"java/lang/Cloneable", "java/io/Serializable"};
+        if (isArray) {
+            superClassName = "java/lang/Object";
+            interfaceNames = new String[]{"java/lang/Cloneable", "java/io/Serializable"};
+        } else {
+            superClassName = null;
+            interfaceNames = null;
+        }
         
         cp = null;
         fields = null;
@@ -355,5 +362,13 @@ public class Jclass {
             }
         }
         return null;
+    }
+    
+    public void setClassObject(Jobject cobj) {
+        this.jClass = cobj;
+    }
+    
+    public Jobject getClassObject() {
+        return this.jClass;
     }
 }

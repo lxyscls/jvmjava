@@ -22,20 +22,32 @@ public class ClassLoader {
     private final ClassPath cp;
     private final Map<String, Jclass> classMap;
     
-    public ClassLoader(ClassPath cp) {
+    public ClassLoader(ClassPath cp) throws IOException {
         this.cp = cp;
         classMap = new HashMap<>();
+        
+        loadBasicClasses();
+        loadPrimitiveClasses();
     }
     
-    public Jclass loadClass(String name) throws IOException {
+    public final Jclass loadClass(String name) throws IOException {
         if (classMap.containsKey(name)) {
             return classMap.get(name);
         }
         
+        Jclass cls;
         if (name.startsWith("[")) {
-            return loadArrayClass(name);
+            cls = loadArrayClass(name);
+        } else {
+            cls = loadNonArrayClass(name);
         }
-        return loadNonArrayClass(name);
+        
+        Jclass jlClassClass = classMap.get("java/lang/Class");
+        if (jlClassClass != null) {
+            cls.setClassObject(jlClassClass.newObject());
+            cls.getClassObject().setExtra(cls);
+        }
+        return cls;
     }
 
     private Jclass loadArrayClass(String name) throws IOException {
@@ -55,7 +67,7 @@ public class ClassLoader {
     }
     
     private Jclass defineClass(String name) throws IOException {
-        Jclass cls = new Jclass(name);
+        Jclass cls = new Jclass(name, true);
         cls.setClassLoader(this);
         resolveSuperClass(cls);
         resolveInterfaces(cls);
@@ -150,6 +162,28 @@ public class ClassLoader {
             } else {
                 staticVars[field.getSlotId()] = cp.getConst(index);
             }
+        }
+    }
+
+    private void loadBasicClasses() throws IOException {        
+        Jclass jlClassClass = this.loadClass("java/lang/Class");
+        for (Jclass cls: classMap.values()) {
+            cls.setClassObject(jlClassClass.newObject());
+            cls.getClassObject().setExtra(cls);
+        }
+    }
+
+    private void loadPrimitiveClasses() throws IOException {
+        String[] types = new String[] {"void", "boolean", "byte", "short",
+            "int", "long", "char", "float", "double"};
+        
+        for (String type: types) {
+            Jclass cls = new Jclass(type, false);
+            cls.setClassLoader(this);          
+            cls.setClassObject(this.loadClass("java/lang/Class").newObject());
+            cls.getClassObject().setExtra(cls);
+            classMap.put(type, cls);
+            System.out.printf("[Loaded %s]\n", cls.getClassName());
         }
     }
 }

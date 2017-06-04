@@ -10,8 +10,6 @@ import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ClassRef;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
 import java.io.IOException;
 
 /**

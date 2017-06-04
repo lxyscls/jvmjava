@@ -39,7 +39,7 @@ class PutStatic extends Index16ByteCode {
             }
             
             if (field.isFinal()) {
-                if (cls != field.getBelongClass() || method.getName().equals("<cinit>")) {
+                if (cls != field.getBelongClass() || !method.getName().equals("<clinit>")) {
                     throw new IllegalAccessError();
                 }
             }

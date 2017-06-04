@@ -32,7 +32,7 @@ class PutField extends Index16ByteCode{
             }
             
             if (field.isFinal()) {
-                if (cls != field.getBelongClass() || method.getName().equals("<init>")) {
+                if (cls != field.getBelongClass() || !method.getName().equals("<init>")) {
                     throw new IllegalAccessError();
                 }
             }
@@ -61,12 +61,6 @@ class GetField extends Index16ByteCode{
             Field field = fr.resolvedField();
             if (field.isStatic()) {
                 throw new IncompatibleClassChangeError();
-            }
-            
-            if (field.isFinal()) {
-                if (cls != field.getBelongClass() || method.getName().equals("<init>")) {
-                    throw new IllegalAccessError();
-                }
             }
             
             Jobject ref = frame.getOperandStack().popRef();

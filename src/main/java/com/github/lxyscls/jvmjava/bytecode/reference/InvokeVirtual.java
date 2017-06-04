@@ -32,7 +32,7 @@ public class InvokeVirtual extends Index16ByteCode {
                 throw new IncompatibleClassChangeError();
             }
 
-            Object[] slots = new Object[method.getArgCount()];
+            Object[] slots = new Object[method.getArgCount()-1];
             for (int i = slots.length-1; i >= 0; i--) {
                 slots[i] = frame.getOperandStack().popObject();
             }
@@ -69,9 +69,6 @@ public class InvokeVirtual extends Index16ByteCode {
             if (method == null || method.isAbstract()) {
                 throw new AbstractMethodError();
             }
-            if (!method.isPublic()) {
-                throw new IllegalAccessError();
-            }
             
             Frame newFrame = new Frame(frame.getThread(), method);
             frame.getThread().pushFrame(newFrame);
@@ -79,7 +76,7 @@ public class InvokeVirtual extends Index16ByteCode {
             for (int i = 0; i < slots.length; i++) {
                 newFrame.getLocalVars().setObject(i+1, slots[i]);
             }     
-            
+            /*
             if (method.isNative()) {
                 if ("registerNatives".equals(method.getName())) {
                     System.out.printf("native method: %s %s %s\n", 
@@ -92,7 +89,7 @@ public class InvokeVirtual extends Index16ByteCode {
                             method.getName(), method.getDescriptor());
                     System.exit(-1);
                 }
-            }            
+            }*/            
         } catch (IOException | IllegalAccessException ex) {
             System.err.println(ex);
             System.exit(-1);

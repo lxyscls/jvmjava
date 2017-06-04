@@ -70,12 +70,13 @@ public class Interpreter {
                         frame.getMethod().getBelongClass().getClassName(),
                         frame.getMethod().getName(),
                         pc, bc.getClass().getSimpleName(), bc.toString());
-
+     
                 bc.execute(frame);
                 if (thread.isStackEmpty()) {
                     break;
                 }
             } catch (UnsupportedOperationException ex) {
+                System.out.println(ex);
                 System.out.printf("localVars: %s\n", frame.getLocalVars());
                 System.out.printf("operandStack: %s\n", frame.getOperandStack());
                 break;

@@ -5,7 +5,6 @@
  */
 package com.github.lxyscls.jvmjava.runtimedata.heap;
 
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Field;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 
 /**
@@ -16,6 +15,7 @@ public class Jobject {
     Jclass _class;
     Object[] fields;
     Object[] array;
+    Jclass extra;
     
     public Jobject(Jclass cls, int instanceFieldCount) {
         this._class = cls;
@@ -53,5 +53,13 @@ public class Jobject {
     
     public Jobject getRefVar(String name, String descriptor) {
         return (Jobject)fields[_class.getInstanceField(name, descriptor).getSlotId()];
+    }
+    
+    public void setExtra(Jclass cls) {
+        this.extra = cls;
+    }
+    
+    public Jclass getExtra() {
+        return this.extra;
     }
 }

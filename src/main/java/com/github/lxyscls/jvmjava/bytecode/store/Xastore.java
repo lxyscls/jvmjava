@@ -141,7 +141,7 @@ class Bastore extends NoOperandByteCode{
             throw new ArrayIndexOutOfBoundsException();
         }
         
-        arrRef.getArray()[index] = value;
+        arrRef.getArray()[index] = (byte)value;
     }
     
 }
@@ -163,7 +163,7 @@ class Castore extends NoOperandByteCode{
             throw new ArrayIndexOutOfBoundsException();
         }
         
-        arrRef.getArray()[index] = value;
+        arrRef.getArray()[index] = (char)value;
     }
     
 }
@@ -185,7 +185,7 @@ class Sastore extends NoOperandByteCode{
             throw new ArrayIndexOutOfBoundsException();
         }
         
-        arrRef.getArray()[index] = value;
+        arrRef.getArray()[index] = (short)value;
     }
     
 }

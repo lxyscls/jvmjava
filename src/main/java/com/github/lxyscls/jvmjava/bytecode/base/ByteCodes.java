@@ -13,6 +13,7 @@ import com.github.lxyscls.jvmjava.bytecode.extend.Extends;
 import com.github.lxyscls.jvmjava.bytecode.load.Loads;
 import com.github.lxyscls.jvmjava.bytecode.math.Maths;
 import com.github.lxyscls.jvmjava.bytecode.reference.References;
+import com.github.lxyscls.jvmjava.bytecode.reserved.Reserveds;
 import com.github.lxyscls.jvmjava.bytecode.stack.Stacks;
 import com.github.lxyscls.jvmjava.bytecode.store.Stores;
 
@@ -43,7 +44,7 @@ public class ByteCodes {
         } else if (opCode >= 0xc4 && opCode <= 0xc9) {
             return Extends.newExtend(opCode);
         } else if (opCode >= 0xca && opCode <= 0xff) {
-            throw new UnsupportedOperationException(String.valueOf(opCode)); // reserved
+            return Reserveds.newReserved(opCode);
         }
         throw new UnsupportedOperationException(String.valueOf(opCode));
     }

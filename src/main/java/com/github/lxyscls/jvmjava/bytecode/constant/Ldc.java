@@ -9,8 +9,11 @@ import com.github.lxyscls.jvmjava.bytecode.base.Index16ByteCode;
 import com.github.lxyscls.jvmjava.bytecode.base.Index8ByteCode;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.OperandStack;
+import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jstring;
+import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ClassRef;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
+import java.io.IOException;
 
 /**
  *
@@ -25,7 +28,15 @@ class Ldc extends Index8ByteCode {
         if (obj instanceof String) {
             stack.pushRef(Jstring.stringToInternObject(frame.getMethod().
                     getBelongClass().getClassLoader(), (String)obj));
-        } else {
+        } else if (obj instanceof ClassRef) {
+            try {
+                Jobject jobj = ((ClassRef) obj).resolvedClass().getClassObject();
+                stack.pushRef(jobj);
+            } catch (IOException | IllegalAccessException ex) {
+                System.out.println(ex);
+                System.exit(-1);
+            }
+        }else {
             stack.pushObject(obj);
         }
     }
@@ -40,6 +51,14 @@ class Ldc_w extends Index16ByteCode {
         if (obj instanceof String) {
             stack.pushRef(Jstring.stringToInternObject(frame.getMethod().
                     getBelongClass().getClassLoader(), (String)obj));
+        } else if (obj instanceof ClassRef) {
+            try {
+                Jobject jobj = ((ClassRef) obj).resolvedClass().getClassObject();
+                stack.pushRef(jobj);
+            } catch (IOException | IllegalAccessException ex) {
+                System.out.println(ex);
+                System.exit(-1);
+            }            
         } else {
             stack.pushObject(obj);
         }

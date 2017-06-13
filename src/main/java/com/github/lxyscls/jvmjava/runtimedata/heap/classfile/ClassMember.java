@@ -18,10 +18,11 @@ public class ClassMember {
     protected final String descriptor;
     protected Jclass _class;
     
-    public ClassMember(MemberInfo info) {
+    public ClassMember(Jclass cls, MemberInfo info) {
         accessFlags = info.getAccessFlags();
         name = info.getName();
         descriptor = info.getDescriptor();
+        _class = cls;
     }
     
     public boolean isPublic() {
@@ -59,11 +60,7 @@ public class ClassMember {
     public Jclass getBelongClass() {
         return this._class;
     }
-    
-    public void setClass(Jclass _class) {
-        this._class = _class;
-    }
-    
+
     public String getName() {
         return this.name;
     }

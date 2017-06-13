@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @author sk-xinyilong
  */
-class ConstantUtf8Info extends ConstantInfo {
+public class ConstantUtf8Info extends ConstantInfo {
     private final String str;
     
     public ConstantUtf8Info(ClassReader reader) throws IOException {

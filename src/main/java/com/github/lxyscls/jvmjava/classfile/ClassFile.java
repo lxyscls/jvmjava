@@ -104,4 +104,8 @@ public class ClassFile {
         }
         return intfNames;
     }
+    
+    public AttributeInfo[] getAttributes() {
+        return this.attributes;
+    }
 }

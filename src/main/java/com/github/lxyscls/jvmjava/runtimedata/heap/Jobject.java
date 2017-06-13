@@ -35,6 +35,10 @@ public class Jobject {
         return this.array;
     }
     
+    public void setArray(Object[] array) {
+        this.array = array;
+    }
+    
     public int getArrayLength() {
         return this.array.length;
     }

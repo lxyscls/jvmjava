@@ -48,6 +48,7 @@ public class Main {
     static void registerRegitsterNatives() {
         com.github.lxyscls.jvmjava.nativemethod.java.lang.Class.init();
         com.github.lxyscls.jvmjava.nativemethod.java.lang.Object.init();
-        com.github.lxyscls.jvmjava.nativemethod.java.lang.Insystem.init();        
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Insystem.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Throwable.init();
     }
 }

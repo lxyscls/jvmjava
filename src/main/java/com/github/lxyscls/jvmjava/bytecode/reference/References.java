@@ -13,6 +13,7 @@ import com.github.lxyscls.jvmjava.bytecode.base.ByteCode;
  */
 public class References {
     static ArrayLength ARRLEN = new ArrayLength();
+    static Athrow ATHROW = new Athrow();
     
     public static ByteCode newReference(short opCode) {
         switch (opCode) {
@@ -28,6 +29,7 @@ public class References {
             case 0xbc: return new NewArray();
             case 0xbd: return new ANewArray();
             case 0xbe: return ARRLEN;
+            case 0xbf: return ATHROW;
             case 0xc0: return new Checkcast();
             case 0xc1: return new Instanceof();
         }

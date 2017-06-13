@@ -6,7 +6,10 @@
 package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
 
 import com.github.lxyscls.jvmjava.classfile.MemberInfo;
+import com.github.lxyscls.jvmjava.classfile.attribute.AttributeInfo;
 import com.github.lxyscls.jvmjava.classfile.attribute.CodeAttributeInfo;
+import com.github.lxyscls.jvmjava.classfile.attribute.LineNumberTableAttributeInfo;
+import java.io.IOException;
 
 /**
  *
@@ -16,10 +19,12 @@ public class Method extends ClassMember {
     private int maxLocals;
     private int maxStack;
     private byte[] code;
+    private ExceptionTable eTable;
+    private LineNumberTableAttributeInfo lineNumberTable;
     private MethodArgRet argRet;
     
-    public Method(MemberInfo info) {
-        super(info);
+    public Method(Jclass cls, MemberInfo info) {
+        super(cls, info);
         argRet = new MethodArgParser(descriptor).parse();
         
         CodeAttributeInfo codeInfo = info.getCodeAttribute();
@@ -27,6 +32,13 @@ public class Method extends ClassMember {
             maxLocals = codeInfo.getMaxLocals();
             maxStack = codeInfo.getMaxStack();
             code = codeInfo.getCode();
+            eTable = new ExceptionTable(codeInfo.getExceptionTable(),
+                    _class.getConstantPool());
+            for (AttributeInfo attr : codeInfo.getAttributes()) {
+                if (attr instanceof LineNumberTableAttributeInfo) {
+                    lineNumberTable = (LineNumberTableAttributeInfo)attr;
+                }
+            }
         }
         if (isNative()) {
             maxLocals = getArgCount();
@@ -60,5 +72,28 @@ public class Method extends ClassMember {
         } else {
             return this.argRet.getArgCount()+1;
         }
+    }
+    
+    public int findExceptionHandlerPc(Jclass extCls, int pc) {
+        try {
+            ExceptionHandler eh = eTable.findExceptionHandler(extCls, pc);
+            if (eh != null) {
+                return eh.getHanlderPc();
+            }
+            return -1;
+        } catch (IOException | IllegalAccessException ex) {
+            System.err.println(ex);
+            return -1;
+        }
+    }
+
+    public int getLineNumber(int pc) {
+        if (isNative()) {
+            return -2;
+        } else if (lineNumberTable == null) {
+            return -1;
+        }
+        
+        return lineNumberTable.getLineNumber(pc);
     }
 }

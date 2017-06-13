@@ -16,8 +16,8 @@ public class Field extends ClassMember {
     private int slotId;
     private final int constantValueIndex;
     
-    public Field(MemberInfo info) {
-        super(info);
+    public Field(Jclass cls, MemberInfo info) {
+        super(cls, info);
         ConstantValueAttributeInfo constantInfo = info.getConstantValueAttribute();
         if (constantInfo != null) {
             constantValueIndex = constantInfo.getConstantValueIndex();

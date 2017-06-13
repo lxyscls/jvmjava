@@ -19,6 +19,14 @@ class LineNumberTableEntry {
         this.startPc = startPc;
         this.lineNumber = lineNumber;
     }
+    
+    public int getStartPc() {
+        return startPc;
+    }
+    
+    public int getLineNumber() {
+        return lineNumber;
+    }
 }
 public class LineNumberTableAttributeInfo extends AttributeInfo {
     private final LineNumberTableEntry[] lineNumberTable;
@@ -26,8 +34,18 @@ public class LineNumberTableAttributeInfo extends AttributeInfo {
     public LineNumberTableAttributeInfo(ClassReader reader) {
         int lineNumberTableLen = reader.readUint16();
         lineNumberTable = new LineNumberTableEntry[lineNumberTableLen];
-        for (LineNumberTableEntry entry: lineNumberTable) {
-            entry = new LineNumberTableEntry(reader.readUint16(), reader.readUint16());
+        for (int i = 0; i < lineNumberTable.length; i++) {
+            lineNumberTable[i] = new LineNumberTableEntry(reader.readUint16(), reader.readUint16());
         }
     }    
+    
+    public int getLineNumber(int pc) {
+        for (int i = lineNumberTable.length-1; i >= 0; i--) {
+            LineNumberTableEntry e = lineNumberTable[i];
+            if (pc >= e.getStartPc()) {
+                return e.getLineNumber();
+            }
+        }
+        return -1;
+    }
 }

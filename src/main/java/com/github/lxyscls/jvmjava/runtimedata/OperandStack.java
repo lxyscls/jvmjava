@@ -72,6 +72,10 @@ public class OperandStack {
         return stack.peekFirst();
     }
     
+    public void clear() {
+        ((LinkedList)stack).clear();
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

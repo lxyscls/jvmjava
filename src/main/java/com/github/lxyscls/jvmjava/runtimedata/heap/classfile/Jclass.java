@@ -8,6 +8,8 @@ package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import com.github.lxyscls.jvmjava.classfile.ClassFile;
 import com.github.lxyscls.jvmjava.classfile.MemberInfo;
+import com.github.lxyscls.jvmjava.classfile.attribute.AttributeInfo;
+import com.github.lxyscls.jvmjava.classfile.attribute.SourceFileAttributeInfo;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.AccessFlags;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
@@ -34,6 +36,7 @@ public class Jclass {
     private int instanceFieldCount;
     private int staticFieldCount;
     private Object[] staticVars;
+    private String sourceFile;
     
     private boolean initStarted;
     private Jobject jClass;
@@ -55,7 +58,6 @@ public class Jclass {
         methods = null;
         superClass = null;
         interfaces = null;
-        
         initStarted = true;
     }
     
@@ -65,22 +67,22 @@ public class Jclass {
         superClassName = cf.getSuperClassName();
         interfaceNames = cf.getInterfaceNames();
         
+        cp = new ConstantPool(this, cf.getConstantPool());
+        
         MemberInfo[] fieldInfos = cf.getFields();
         fields = new Field[fieldInfos.length];
         for (int i = 0; i < fields.length; i++) {
-            fields[i] = new Field(fieldInfos[i]);
-            fields[i].setClass(this);
+            fields[i] = new Field(this, fieldInfos[i]);
         }
         
         MemberInfo[] methodInfos = cf.getMethods();
         methods = new Method[methodInfos.length];
         for (int i = 0; i < methods.length; i++) {
-            methods[i] = new Method(methodInfos[i]);
-            methods[i].setClass(this);
+            methods[i] = new Method(this, methodInfos[i]);
         }
-
-        cp = new ConstantPool(this, cf.getConstantPool());
         
+        sourceFile = getSourceFile(cf);
+
         superClass = null;
         interfaces = null;
         instanceFieldCount = 0;
@@ -353,8 +355,8 @@ public class Jclass {
     }
     
     public Field getInstanceField(String name, String descriptor) {
-        for (Jclass cls = this; cls != null; cls = this.superClass) {
-            for (Field field : fields) {
+        for (Jclass cls = this; cls != null; cls = cls.superClass) {
+            for (Field field : cls.getFields()) {
                 if (!field.isStatic() && name.equals(field.getName()) 
                         && descriptor.equals(field.getDescriptor())) {
                     return field;
@@ -370,5 +372,18 @@ public class Jclass {
     
     public Jobject getClassObject() {
         return this.jClass;
+    }
+    
+    public String getSourceFile() {
+        return this.sourceFile;
+    }
+
+    private String getSourceFile(ClassFile cf) {
+        for (AttributeInfo attr : cf.getAttributes()) {
+            if (attr instanceof SourceFileAttributeInfo) {
+                return ((SourceFileAttributeInfo) attr).getFileName();
+            }
+        }
+        return "Unknown";
     }
 }

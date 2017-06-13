@@ -15,11 +15,7 @@ import java.util.Map;
  */
 public abstract class NativeMethod {
     static Map<String, NativeMethod> map = new HashMap<>();
-    static NativeMethod emptyNativeMethod = new NativeMethod() {
-        @Override
-        public void func(Frame frame) {}
-    };
-    
+
     public abstract void func(Frame frame);
     
     public static void registerNativeMethod(String className, String methodName, String methodDescriptor, NativeMethod method) {
@@ -32,11 +28,6 @@ public abstract class NativeMethod {
         if (map.containsKey(key)) {
             return map.get(key);
         }
-        /*
-        if ("()V".equals(methodDescriptor) && "registerNatives".equals(methodName)) {
-            return emptyNativeMethod;
-        }
-        */
         return null;
     }
 }

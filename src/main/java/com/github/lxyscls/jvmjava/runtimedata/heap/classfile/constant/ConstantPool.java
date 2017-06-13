@@ -15,6 +15,7 @@ import com.github.lxyscls.jvmjava.classfile.constant.ConstantInterfaceMethodrefI
 import com.github.lxyscls.jvmjava.classfile.constant.ConstantLongInfo;
 import com.github.lxyscls.jvmjava.classfile.constant.ConstantMethodrefInfo;
 import com.github.lxyscls.jvmjava.classfile.constant.ConstantStringInfo;
+import com.github.lxyscls.jvmjava.classfile.constant.ConstantUtf8Info;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 
 /**
@@ -44,6 +45,8 @@ public class ConstantPool {
                 i++;
             } else if (info instanceof ConstantStringInfo) {
                 consts[i] = ((ConstantStringInfo) info).getString();
+            } else if (info instanceof ConstantUtf8Info) {
+                consts[i] = ((ConstantUtf8Info) info).getUtf8();
             } else if (info instanceof ConstantClassInfo) {
                 consts[i] = new ClassRef(this, (ConstantClassInfo) info);
             } else if (info instanceof ConstantFieldrefInfo) {

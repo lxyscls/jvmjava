@@ -26,7 +26,7 @@ public final class Throwable {
                     @Override
                     public void func(Frame frame) {
                         Jobject ex = frame.getLocalVars().getRef(0);
-                        // use filed "array" for little hack
+                        // use filed "array" for hack
                         ex.setArray(createStackTraceElements(ex, frame.getThread()));
                         frame.getOperandStack().pushRef(ex);
                     }

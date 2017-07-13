@@ -14,6 +14,8 @@ import com.github.lxyscls.jvmjava.bytecode.base.ByteCode;
 public class References {
     static ArrayLength ARRLEN = new ArrayLength();
     static Athrow ATHROW = new Athrow();
+    static MonitorEnter MEN = new MonitorEnter();
+    static MonitorExit MEX = new MonitorExit();
     
     public static ByteCode newReference(short opCode) {
         switch (opCode) {
@@ -32,6 +34,8 @@ public class References {
             case 0xbf: return ATHROW;
             case 0xc0: return new Checkcast();
             case 0xc1: return new Instanceof();
+            case 0xc2: return MEN;
+            case 0xc3: return MEX;
         }
         return null;
     }

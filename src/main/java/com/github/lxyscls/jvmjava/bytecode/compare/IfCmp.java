@@ -99,7 +99,7 @@ class IfAcmpeq extends BranchByteCode {
         Object value2 = stack.popRef();
         Object value1 = stack.popRef();
         
-        if (value1.equals(value2)) {
+        if (value1 == value2) {
             branch(frame, offset);
         }
     }
@@ -112,7 +112,7 @@ class IfAcmpne extends BranchByteCode {
         Object value2 = stack.popRef();
         Object value1 = stack.popRef();
         
-        if (!value1.equals(value2)) {
+        if (value1 != value2) {
             branch(frame, offset);
         }
     }

@@ -25,7 +25,11 @@ class Ireturn extends NoOperandByteCode {
         Frame lastFrame = frame.getThread().popFrame();
         Frame invokeFrame = frame.getThread().currentFrame();
         
-        invokeFrame.getOperandStack().pushInt(lastFrame.getOperandStack().popInt());
+        if (lastFrame.getOperandStack().getTop() instanceof Boolean) {
+            invokeFrame.getOperandStack().pushObject(lastFrame.getOperandStack().popObject());
+        } else {
+            invokeFrame.getOperandStack().pushInt(lastFrame.getOperandStack().popInt());
+        }
     }
 }
 

@@ -19,7 +19,7 @@ class Ishl extends NoOperandByteCode {
         OperandStack stack = frame.getOperandStack();
         int value2 = stack.popInt();
         int value1 = stack.popInt();
-        stack.pushInt(value1 << (0x1F | value2));
+        stack.pushInt(value1 << (0x1F & value2));
     }
 }
 
@@ -29,6 +29,6 @@ class Lshl extends NoOperandByteCode {
         OperandStack stack = frame.getOperandStack();
         int value2 = stack.popInt();
         long value1 = stack.popLong();
-        stack.pushLong(value1 << (0x3F | value2));
+        stack.pushLong(value1 << (0x3F & value2));
     }
 }

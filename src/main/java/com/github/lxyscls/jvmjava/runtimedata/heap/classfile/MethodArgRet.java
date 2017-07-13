@@ -32,6 +32,10 @@ public class MethodArgRet {
         return this.retType;
     }
     
+    String[] getArgTypes() {
+        return this.argTypes.toArray(new String[0]);
+    }
+    
     int getArgCount() {
         return argTypes.size();
     }

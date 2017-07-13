@@ -33,6 +33,10 @@ public class Interpreter {
         loop(thread);
     }
     
+    public static void interpret(Jthread thread) {
+        loop(thread);
+    }
+    
     static Jobject createArgsArrayRef(ClassLoader loader, String[] args) {
         try {
             Jclass cls = loader.loadClass("java/lang/String").newArrayClass();
@@ -65,12 +69,12 @@ public class Interpreter {
                 }
                 bc.fetchOperands(reader);
                 frame.setNextPc(reader.getPc());
-
+                /*
                 System.out.printf("%s.%s() pc: %2d bytecode: %s val: %s\n", 
                         frame.getMethod().getBelongClass().getClassName(),
                         frame.getMethod().getName(),
                         pc, bc.getClass().getSimpleName(), bc.toString());
-     
+                */   
                 bc.execute(frame);
                 if (thread.isStackEmpty()) {
                     break;

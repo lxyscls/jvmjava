@@ -12,16 +12,20 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.AccessFlags;
  *
  * @author sk-xinyilong
  */
-public class ClassMember {
+public class ClassMember implements Cloneable {
     protected final int accessFlags;
     protected final String name;
     protected final String descriptor;
+    protected final String signature;
+    protected final byte[] annotationData;
     protected Jclass _class;
     
     public ClassMember(Jclass cls, MemberInfo info) {
         accessFlags = info.getAccessFlags();
         name = info.getName();
         descriptor = info.getDescriptor();
+        signature = "sig";
+        annotationData = new byte[]{'a'};
         _class = cls;
     }
     
@@ -67,6 +71,18 @@ public class ClassMember {
     
     public String getDescriptor() {
         return this.descriptor;
+    }
+    
+    public int getAccessFlags() {
+        return this.accessFlags;
+    }
+    
+    public String getSignature() {
+        return this.signature;
+    }
+    
+    public byte[] getAnnotationData() {
+        return this.annotationData;
     }
      
     public boolean isAccessibleTo(Jclass cls) {

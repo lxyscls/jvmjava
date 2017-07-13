@@ -15,12 +15,9 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 public class MethodLookup {
     public static Method lookupMethodInClass(Jclass cls, String name, String descriptor) {
         for (Jclass _cls = cls; _cls != null; _cls = _cls.getSuperClass()) {
-            Method[] methods = _cls.getMethods();
-            if (methods != null) {
-                for (Method method: _cls.getMethods()) {
-                    if (name.equals(method.getName()) && descriptor.equals(method.getDescriptor())) {
-                        return method;
-                    }
+            for (Method method: _cls.getMethods()) {
+                if (name.equals(method.getName()) && descriptor.equals(method.getDescriptor())) {
+                    return method;
                 }
             }
         }

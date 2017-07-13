@@ -8,7 +8,6 @@ package com.github.lxyscls.jvmjava.bytecode.reference;
 import com.github.lxyscls.jvmjava.bytecode.base.Index16ByteCode;
 import com.github.lxyscls.jvmjava.runtimedata.Frame;
 import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
-import com.github.lxyscls.jvmjava.runtimedata.heap.Jstring;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
@@ -38,22 +37,6 @@ public class InvokeVirtual extends Index16ByteCode {
             }
             Jobject ref = frame.getOperandStack().popRef();
             if (ref == null) {
-                if (mr.getName().equals("println")) {
-                    switch (mr.getDescriptor()) {
-                        case "(Z)V": System.out.println((Integer)slots[0] != 0); break;
-                        case "(C)V": System.out.println((Integer)slots[0]); break;
-                        case "(B)V": System.out.println((Integer)slots[0]); break;
-                        case "(S)V": System.out.println((Integer)slots[0]); break;
-                        case "(I)V": System.out.println((Integer)slots[0]); break;
-                        case "(J)V": System.out.println((Long)slots[0]); break;
-                        case "(F)V": System.out.println((Float)slots[0]); break;
-                        case "(D)V": System.out.println((Double)slots[0]); break;
-                        case "(Ljava/lang/String;)V": 
-                            System.out.println(Jstring.internObjectToString((Jobject)slots[0]));break;
-                        default: throw new NoSuchMethodError(mr.getDescriptor());
-                    }
-                    return;
-                }
                 throw new NullPointerException();
             }
 
@@ -72,24 +55,17 @@ public class InvokeVirtual extends Index16ByteCode {
             
             Frame newFrame = new Frame(frame.getThread(), method);
             frame.getThread().pushFrame(newFrame);
+            
             newFrame.getLocalVars().setObject(0, ref);
-            for (int i = 0; i < slots.length; i++) {
-                newFrame.getLocalVars().setObject(i+1, slots[i]);
-            }     
-            /*
-            if (method.isNative()) {
-                if ("registerNatives".equals(method.getName())) {
-                    System.out.printf("native method: %s %s %s\n", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());                        
-                    frame.getThread().popFrame();
+            int i = 1;
+            for (Object obj : slots) {
+                newFrame.getLocalVars().setObject(i, obj);
+                if (obj instanceof Long || obj instanceof Double) {
+                    i += 2;
                 } else {
-                    System.err.printf("native method: %s %s %s", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());
-                    System.exit(-1);
+                    i += 1;                    
                 }
-            }*/            
+            }            
         } catch (IOException | IllegalAccessException ex) {
             System.err.println(ex);
             System.exit(-1);

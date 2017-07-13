@@ -5,10 +5,6 @@
  */
 package com.github.lxyscls.jvmjava;
 
-import com.github.lxyscls.jvmjava.classpath.ClassPath;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.ClassLoader;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
-import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Method;
 import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 
@@ -27,28 +23,35 @@ public class Main {
                 Cmd.printUsage();
             } else {
                 registerRegitsterNatives();
-                startJVM(cmd);
+                new JVM(cmd).start();
             }
         } catch (ParseException ex) {
             Cmd.printUsage();
         }
     }
     
-    static void startJVM(Cmd cmd) throws IOException {
-        ClassLoader cl = new ClassLoader(new ClassPath(cmd.XjreOption, cmd.cpOption));
-        Jclass cls = cl.loadClass(cmd.runClass.replace(".", "/"));
-        Method method = cls.getMainMethod();
-        if (method != null) {
-            Interpreter.interpret(method, cmd.runClassArgs);
-        } else {
-            System.out.printf("Main method not found in class %s\n", cmd.runClass);
-        }
-    }
-    
     static void registerRegitsterNatives() {
-        com.github.lxyscls.jvmjava.nativemethod.java.lang.Class.init();
-        com.github.lxyscls.jvmjava.nativemethod.java.lang.Object.init();
-        com.github.lxyscls.jvmjava.nativemethod.java.lang.Insystem.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Nclass.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Nobject.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Nsystem.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Nfloat.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Ndouble.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Nstring.init();
         com.github.lxyscls.jvmjava.nativemethod.java.lang.Throwable.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.Thread.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.NclassLoader.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.lang.ClassLoader$NativeLibrary.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.misc.VM.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.misc.Unsafe.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.misc.Signal.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.reflect.Reflection.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.reflect.NativeConstructorAccessorImpl.init();
+        com.github.lxyscls.jvmjava.nativemethod.sun.io.Win32ErrorMode.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.io.FileOutputStream.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.io.FileInputStream.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.io.FileDescriptor.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.io.WinNTFileSystem.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.security.AccessController.init();
+        com.github.lxyscls.jvmjava.nativemethod.java.util.concurrent.atomic.AtomicLong.init();
     }
 }

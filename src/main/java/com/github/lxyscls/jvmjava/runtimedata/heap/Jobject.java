@@ -11,7 +11,7 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.Jclass;
  *
  * @author sk-xinyilong
  */
-public class Jobject {
+public class Jobject implements Cloneable {
     Jclass _class;
     Object[] fields;
     Object[] array;
@@ -19,12 +19,14 @@ public class Jobject {
     
     public Jobject(Jclass cls, int instanceFieldCount) {
         this._class = cls;
-        fields = new Object[instanceFieldCount];
+        this.fields = new Object[instanceFieldCount];
+        this.array = null;
     }
     
     public Jobject(Jclass cls, Object[] array) {
         this._class = cls;
         this.array = array;
+        this.fields = null;
     }
     
     public Object[] getFields() {
@@ -51,12 +53,12 @@ public class Jobject {
         return cls.isAssignableFrom(this._class);
     }
     
-    public void setRefVar(String name, String descriptor, Jobject obj) {
+    public void setRefVar(String name, String descriptor, Object obj) {
         fields[_class.getInstanceField(name, descriptor).getSlotId()] = obj;
     }
     
-    public Jobject getRefVar(String name, String descriptor) {
-        return (Jobject)fields[_class.getInstanceField(name, descriptor).getSlotId()];
+    public Object getRefVar(String name, String descriptor) {
+        return fields[_class.getInstanceField(name, descriptor).getSlotId()];
     }
     
     public void setExtra(Jclass cls) {
@@ -65,5 +67,10 @@ public class Jobject {
     
     public Jclass getExtra() {
         return this.extra;
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

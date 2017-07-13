@@ -37,23 +37,20 @@ public class InvokeStatic extends Index16ByteCode {
             
             Frame newFrame = new Frame(frame.getThread(), method);
             frame.getThread().pushFrame(newFrame);
-            for (int i = method.getArgCount()-1; i >= 0; i--) {
-                newFrame.getLocalVars().setObject(i, frame.getOperandStack().popObject());
+            
+            Object[] slots = new Object[method.getArgCount()];
+            for (int i = slots.length-1; i >= 0; i--) {
+                slots[i] = frame.getOperandStack().popObject();
             }
-            /*
-            if (method.isNative()) {
-                if ("registerNatives".equals(method.getName())) {
-                    System.out.printf("native method: %s %s %s\n", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());                    
-                    frame.getThread().popFrame();
+            int i = 0;
+            for (Object obj : slots) {
+                newFrame.getLocalVars().setObject(i, obj);
+                if (obj instanceof Long || obj instanceof Double) {
+                    i += 2;
                 } else {
-                    System.err.printf("native method: %s %s %s\n", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());
-                    System.exit(-1);
+                    i += 1;                    
                 }
-            }*/            
+            }
         } catch (IOException | IllegalAccessException ex) {
             System.err.println(ex);
             System.exit(-1);

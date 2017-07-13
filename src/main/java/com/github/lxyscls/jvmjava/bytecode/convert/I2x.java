@@ -53,11 +53,10 @@ class I2c extends NoOperandByteCode {
         int value = stack.popInt();
         
         BigInteger bi = new BigInteger(String.valueOf(value));
-        byte[] ba = bi.toByteArray();
-        ba[0] = 0;
-        ba[1] = 0;
-        BigInteger bbi = new BigInteger(ba);
-        stack.pushInt(bbi.intValue());
+        byte[] ba = new byte[4];
+        byte[] bia = bi.toByteArray();
+        System.arraycopy(bia, 0, ba, ba.length-bia.length, bia.length);
+        stack.pushInt(new BigInteger(ba).intValue());
     }
 }
 

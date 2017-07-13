@@ -24,15 +24,26 @@ public class Jstring {
             return map.get(str);
         }
         
+        if (str == null) {
+            return null;
+        }
+        
         char[] ca = str.toCharArray();
         Character[] Ca = new Character[ca.length];
         for (int i = 0; i < Ca.length; i++) {
             Ca[i] = ca[i];
         }
         
+        int hash = 0;
+        for (int i = 0; i < ca.length; i++) {
+            hash = 31 * hash + ca[i];
+        }
+        
         try {
             Jobject jstr = loader.loadClass("java/lang/String").newObject();
             jstr.setRefVar("value", "[C", new Jobject(loader.loadClass("[C"), Ca));
+            // Pre-caculate hashCode of intern string
+            jstr.setRefVar("hash", "I", hash);
             map.put(str, jstr);
             return jstr;
         } catch (IOException ex) {
@@ -43,7 +54,7 @@ public class Jstring {
     }
     
     public static String internObjectToString(Jobject obj) {
-        Jobject value = obj.getRefVar("value", "[C");
+        Jobject value = (Jobject)obj.getRefVar("value", "[C");
         Character[] Ca = (Character[])value.getArray();
         char[] ca = new char[Ca.length];
         for (int i = 0; i < ca.length; i++) {

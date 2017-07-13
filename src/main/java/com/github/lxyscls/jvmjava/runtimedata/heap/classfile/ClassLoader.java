@@ -54,7 +54,7 @@ public class ClassLoader {
         Jclass cls = defineClass(name);
         
         classMap.put(cls.getClassName(), cls);
-        System.out.printf("[Loaded %s]\n", cls.getClassName());
+        //System.out.printf("[Loaded %s]\n", cls.getClassName());
         return cls;
     }    
     
@@ -62,7 +62,7 @@ public class ClassLoader {
         Jclass cls = defineClass(this.cp.readClass(name));
         link(cls);
         classMap.put(cls.getClassName(), cls);
-        System.out.printf("[Loaded %s]\n", cls.getClassName());
+        //System.out.printf("[Loaded %s]\n", cls.getClassName());
         return cls;
     }
     
@@ -145,8 +145,12 @@ public class ClassLoader {
     private void allocAndInitStaticVars(Jclass cls) {
         cls.setStaticVars(new Object[cls.getStaticFieldCount()]);
         for (Field field: cls.getFields()) {
-            if (field.isStatic() && field.isFinal()) {
-                initStaticFinalVar(cls, field);
+            if (field.isStatic()) {
+                if (field.isFinal()) {
+                    initStaticFinalVar(cls, field);
+                } else {
+                    initFinalVar(cls, field);
+                }
             }
         }
     }
@@ -164,6 +168,27 @@ public class ClassLoader {
             }
         }
     }
+    
+    private void initFinalVar(Jclass cls, Field field) {
+        Object[] staticVars = cls.getStaticVars();        
+        switch (field.getDescriptor().charAt(0)) {
+            case 'L': case '[':
+                staticVars[field.getSlotId()] = null;
+                break;
+            case 'B': case 'C': case 'S': case 'I':
+                staticVars[field.getSlotId()] = 0;
+                break;
+            case 'J':
+                staticVars[field.getSlotId()] = 0L;
+                break;
+            case 'Z':
+                staticVars[field.getSlotId()] = false;
+                break;
+            case 'F': case 'D':
+                staticVars[field.getSlotId()] = 0.0;
+                break;
+        }
+    }    
 
     private void loadBasicClasses() throws IOException {        
         Jclass jlClassClass = this.loadClass("java/lang/Class");
@@ -183,7 +208,7 @@ public class ClassLoader {
             cls.setClassObject(this.loadClass("java/lang/Class").newObject());
             cls.getClassObject().setExtra(cls);
             classMap.put(type, cls);
-            System.out.printf("[Loaded %s]\n", cls.getClassName());
+            //System.out.printf("[Loaded %s]\n", cls.getClassName());
         }
     }
 }

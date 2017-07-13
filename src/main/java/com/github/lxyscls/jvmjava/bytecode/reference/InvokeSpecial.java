@@ -62,24 +62,17 @@ public class InvokeSpecial extends Index16ByteCode {
             
             Frame newFrame = new Frame(frame.getThread(), method);
             frame.getThread().pushFrame(newFrame);
+            
             newFrame.getLocalVars().setObject(0, ref);
-            for (int i = 0; i < slots.length; i++) {
-                newFrame.getLocalVars().setObject(i+1, slots[i]);
-            }
-            /*
-            if (method.isNative()) {
-                if ("registerNatives".equals(method.getName())) {
-                    System.out.printf("native method: %s %s %s\n", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());                        
-                    frame.getThread().popFrame();
+            int i = 1;
+            for (Object obj : slots) {
+                newFrame.getLocalVars().setObject(i, obj);
+                if (obj instanceof Long || obj instanceof Double) {
+                    i += 2;
                 } else {
-                    System.err.printf("native method: %s %s %s", 
-                            method.getBelongClass().getClassName(),
-                            method.getName(), method.getDescriptor());
-                    System.exit(-1);
+                    i += 1;                    
                 }
-            }*/
+            }
         } catch (IOException | IllegalAccessException ex) {
             System.err.println(ex);
             System.exit(-1);

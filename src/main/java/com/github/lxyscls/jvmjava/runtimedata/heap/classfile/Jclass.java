@@ -16,6 +16,8 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.Jobject;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.MethodLookup;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -54,10 +56,10 @@ public class Jclass {
         }
         
         cp = null;
-        fields = null;
-        methods = null;
+        fields = new Field[0];
+        methods = new Method[0];
         superClass = null;
-        interfaces = null;
+        interfaces = new Jclass[0];
         initStarted = true;
     }
     
@@ -120,6 +122,10 @@ public class Jclass {
     
     public boolean isEnum() {
         return (accessFlags & AccessFlags.ACC_ENUM) != 0;
+    }
+    
+    public int getAccessFlags() {
+        return this.accessFlags;
     }
        
     public String getClassName() {
@@ -263,10 +269,14 @@ public class Jclass {
         return this.initStarted;
     }
     
+    public void setInitStarted() {
+        this.initStarted = true;
+    }
+    
     public void clInitClass(Frame frame) {
         this.initStarted = true;
         Method clinit = MethodLookup.lookupMethodInClass(this, "<clinit>", "()V");
-        if (clinit != null) {
+        if (clinit != null && clinit.getBelongClass() == this) {
             Frame newFrame = new Frame(frame.getThread(), clinit);
             frame.getThread().pushFrame(newFrame);
         }
@@ -278,7 +288,34 @@ public class Jclass {
     }
         
     public Jobject newObject() {
-        return new Jobject(this, instanceFieldCount);
+        return initInstanceFields(new Jobject(this, instanceFieldCount));
+    }
+    
+    private Jobject initInstanceFields(Jobject obj) {
+        for (Jclass cls = this; cls != null; cls = cls.getSuperClass()) {
+            for (Field field : cls.getFields()) {
+                if (!field.isStatic()) {
+                    switch (field.getDescriptor().charAt(0)) {
+                        case 'L': case '[':
+                            obj.getFields()[field.getSlotId()] = null;
+                            break;
+                        case 'B': case 'C': case 'S': case 'I':
+                            obj.getFields()[field.getSlotId()] = 0;
+                            break;
+                        case 'J':
+                            obj.getFields()[field.getSlotId()] = 0L;
+                            break;                            
+                        case 'Z':
+                            obj.getFields()[field.getSlotId()] = false;
+                            break;
+                        case 'F': case 'D':
+                            obj.getFields()[field.getSlotId()] = 0.0;
+                            break;
+                    }
+                }
+            }
+        }
+        return obj;
     }
     
     public Jobject newArray(int count) {
@@ -334,7 +371,7 @@ public class Jclass {
         return loader.loadClass(getComponentClassName());
     }
 
-    private String getComponentClassName() {
+    public String getComponentClassName() {
         String subName = getClassName().substring(1);
         if (subName.startsWith("L")) {
             return subName.substring(1, subName.length()-1);
@@ -385,5 +422,69 @@ public class Jclass {
             }
         }
         return "Unknown";
+    }
+    
+    public boolean isPrimitive() {
+        return "void".equals(className) || "boolean".equals(className) || 
+                "byte".equals(className) || "short".equals(className) || 
+                "int".equals(className) || "long".equals(className) || 
+                "char".equals(className) || "float".equals(className) || 
+                "double".equals(className);
+    }
+    
+    // reflect
+    public Method[] getPublicOnlyCtor(int publicOnly) {
+        boolean pub = (publicOnly == 1);
+        List<Method> list = new LinkedList<>();
+        for (Method method : methods) {
+            if ("<init>".equals(method.getName()) && !method.isStatic() && 
+                    (!pub || method.isPublic())) {
+                list.add(method);
+            }
+        }
+        return list.toArray(new Method[0]);
+    }    
+    
+    // reflect
+    public Field[] getPublicOnlyField(int publicOnly) {
+        if (publicOnly == 1) {
+            List<Field> list = new LinkedList<>();
+            for (Field field : fields) {
+                if (field.isPublic()) {
+                    list.add(field);
+                }
+            }
+            return list.toArray(new Field[0]);
+        } else {
+            return fields;
+        }
+    }    
+    
+    public static String toClassName(String descriptor) {
+        switch (descriptor.charAt(0)) {
+            case '[': return descriptor;
+            case 'L':
+                return descriptor.substring(1, descriptor.length()-1);
+            case 'V': return "void";
+            case 'Z': return "boolean";
+            case 'B': return "byte";
+            case 'S': return "short";
+            case 'I': return "int";
+            case 'J': return "long";
+            case 'C': return "char";
+            case 'F': return "float";
+            case 'D': return "double";
+            default: return descriptor;
+        }
+    }    
+    
+    public static Jobject toClassArr(ClassLoader cl, Jclass[] clss) throws IOException {
+        Jclass caCls = cl.loadClass("java/lang/Class").newArrayClass();
+        Jobject caArr = caCls.newArray(clss == null ? 0 : clss.length);
+        
+        for (int i = 0; i < caArr.getArrayLength(); i++) {
+            caArr.getArray()[i] = clss[i].getClassObject();
+        }
+        return caArr;
     }
 }

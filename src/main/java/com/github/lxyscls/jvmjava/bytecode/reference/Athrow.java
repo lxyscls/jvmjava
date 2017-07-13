@@ -54,7 +54,7 @@ public class Athrow extends NoOperandByteCode {
     }
 
     private void handleUncaughtException(Jthread thread, Jobject ex) {
-        Jobject jStr = ex.getRefVar("detailMessage", "Ljava/lang/String;");
+        Jobject jStr = (Jobject)ex.getRefVar("detailMessage", "Ljava/lang/String;");
         if (jStr != null) {
             String str = Jstring.internObjectToString(jStr);
             System.err.println(ex.getBelongClass().getClassName().replace("/", ".") + ": " + str);

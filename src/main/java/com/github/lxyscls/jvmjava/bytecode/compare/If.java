@@ -18,8 +18,14 @@ class Ifeq extends BranchByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        if (stack.popInt() == 0) {
-            branch(frame, offset);
+        if (stack.getTop() instanceof Boolean) {
+            if ((Boolean)stack.popObject() == false) {
+                branch(frame, offset);                
+            }
+        } else {
+            if (stack.popInt() == 0) {
+                branch(frame, offset);
+            }
         }
     }    
 }
@@ -28,8 +34,14 @@ class Ifne extends BranchByteCode {
     @Override
     public void execute(Frame frame) {
         OperandStack stack = frame.getOperandStack();
-        if (stack.popInt() != 0) {
-            branch(frame, offset);
+        if (stack.getTop() instanceof Boolean) {
+            if ((Boolean)stack.popObject() != false) {
+                branch(frame, offset);                
+            }
+        } else {
+            if (stack.popInt() != 0) {
+                branch(frame, offset);
+            }
         }
     }    
 }

@@ -163,7 +163,7 @@ class Caload extends NoOperandByteCode {
         }
         
         Character[] array = (Character[])arrRef.getArray();
-        stack.pushInt(Character.getNumericValue(array[index]));
+        stack.pushInt((int)array[index]);
     }
     
 }

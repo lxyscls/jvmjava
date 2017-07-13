@@ -7,6 +7,7 @@ package com.github.lxyscls.jvmjava.runtimedata.heap.classfile;
 
 import com.github.lxyscls.jvmjava.classfile.MemberInfo;
 import com.github.lxyscls.jvmjava.classfile.attribute.ConstantValueAttributeInfo;
+import java.io.IOException;
 
 /**
  *
@@ -40,5 +41,10 @@ public class Field extends ClassMember {
     
     public boolean isLongOrDouble() {
         return descriptor.equals("J") || descriptor.equals("D");
+    }
+    
+    public Jclass getTypeClass() throws IOException {
+        String className = Jclass.toClassName(descriptor);
+        return getBelongClass().getClassLoader().loadClass(className);
     }
 }

@@ -10,36 +10,6 @@ import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ClassRef;
 import com.github.lxyscls.jvmjava.runtimedata.heap.classfile.constant.ConstantPool;
 import java.io.IOException;
 
-class ExceptionHandler {
-    private final int startPc;
-    private final int endPc;
-    private final int handlerPc;
-    private final ClassRef catchType;
-    
-    public ExceptionHandler(int startPc, int endPc, int handlerPc, ClassRef catchType) {
-        this.startPc = startPc;
-        this.endPc = endPc;
-        this.handlerPc = handlerPc;
-        this.catchType = catchType;
-    }
-    
-    public int getStartPc() {
-        return startPc;
-    }
-    
-    public int getEndPc() {
-        return endPc;
-    }
-    
-    public int getHanlderPc() {
-        return handlerPc;
-    }
-    
-    public ClassRef getCatchType() {
-        return catchType;
-    }
-}
-
 /**
  *
  * @author sk-xinyilong
@@ -56,7 +26,7 @@ public class ExceptionTable {
         }
     }
 
-    ExceptionHandler findExceptionHandler(Jclass extCls, int pc) throws IOException, IllegalAccessException {
+    public ExceptionHandler findExceptionHandler(Jclass extCls, int pc) throws IOException, IllegalAccessException {
         for (ExceptionHandler eh : table) {
             if (pc >= eh.getStartPc() && pc < eh.getEndPc()) {
                 if (eh.getCatchType() == null) { // catch all
@@ -71,4 +41,7 @@ public class ExceptionTable {
         return null;
     }
     
+    public ExceptionHandler[] getExHandlerTable() {
+        return this.table;
+    }
 }

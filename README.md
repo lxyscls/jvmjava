@@ -1,7 +1,9 @@
 # jvmjava
 A java version of <[Write your own java virtual machine][1]>.
 
-> My OS is Win7 64-bit, Java is 1.8.0_91. I am not sure that it can run under other platform, because there are many many native methods which have not been implemented!!!
+> My OS is Win7 64-bit, and Java is 1.8.0_91. 
+
+> There are many many native methods which have not been implemented, so it can't "Write once, run anywhere" @_@
 
 ![](https://images-cn.ssl-images-amazon.com/images/I/51drSx24-CL._SX381_BO1,204,203,200_.jpg)
 
